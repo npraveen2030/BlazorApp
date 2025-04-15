@@ -1,0 +1,22 @@
+﻿<!-- Sign in -->
+@page "/signin"
+@rendermode InteractiveServer
+@using System.ComponentModel.DataAnnotations
+@inherits BlazorApp5.Components.SignIn
+
+<EditForm Model="@signInInstance" >
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="input_container">
+        <div class="input_wraper">
+            <InputText @bind-Value="signInInstance.Email" placeholder="Email" />
+        </div>
+        
+        <div class="input_wraper">
+            <InputText @bind-Value="signInInstance.Password" InputType="password" placeholder="Password" />
+        </div>
+        
+        <button type="submit" class="submit_button">Sign in</button>
+        <button class="redirect_button">Register</button>
+    </div>
+</EditForm>

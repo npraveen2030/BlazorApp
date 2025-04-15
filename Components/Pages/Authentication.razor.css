@@ -1,0 +1,45 @@
+﻿.user_img {
+    width: 100px;
+    height: 100px;
+}
+
+.auth_container {
+    width: 40vw;
+    height: 80vh;
+    margin: auto;
+    background-color: white;
+    border-radius: 20px;
+    display: flex;
+    flex-direction:column;
+    gap : 10vh;
+}
+
+.tabs {
+    list-style-type: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+    border-radius: 20px 20px 0 0;
+    background-color: #F1F1F1;
+}
+
+.tabs button {
+    border: none;
+    border-radius: 20px 20px 0 0;
+    background-color: transparent;
+    cursor: pointer;
+    width: 20vw; 
+    height: 50px;
+}
+
+.tabs button.active {
+    background-color: white;
+    color: black;
+}
+
+figure {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px
+}
+

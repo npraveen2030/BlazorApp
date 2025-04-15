@@ -1,0 +1,31 @@
+﻿@page "/"
+@rendermode InteractiveServer
+@inherits BlazorApp5.Components.Authentication
+
+<PageTitle>Authentication</PageTitle>
+
+<div class="auth_container">
+    <div class="top">
+        <ul class="tabs">
+          <li><button @onclick='() => SetActiveTab("SignIn")'
+                        class="@(activeTab == "SignIn" ? "active" : "")">Sign in</button></li>
+          <li><button @onclick='() => SetActiveTab("Register")'
+                    class="@(activeTab == "Register" ? "active" : "")">Register</button></li>
+        </ul>
+        <figure>
+	        <img src="images/user.png" alt="user pic" class="user_img" />
+        </figure>
+    </div>
+	
+    <div class="bottom">
+        @if (activeTab == "SignIn")
+        {
+            <SignIn />
+        }
+        else if (activeTab == "Register")
+        {
+            <Register />
+        }
+    </div>
+
+</div>

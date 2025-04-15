@@ -1,0 +1,30 @@
+﻿<!-- Register -->
+@page "/register"
+@rendermode InteractiveServer
+@using System.ComponentModel.DataAnnotations
+@inherits BlazorApp5.Components.Register
+
+<EditForm Model="@registerInstance" >
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="input_container">
+        <div class="input_wraper">
+            <InputText @bind-Value="registerInstance.Email" placeholder="Email"/>
+        </div>
+
+        <div class="input_wraper">
+            <InputText @bind-Value="registerInstance.Password" InputType="password" placeholder="Password"/>
+        </div>
+
+        <div class="input_wraper">
+            <InputText @bind-Value="registerInstance.ConfirmPassword" InputType="password" placeholder="Confirm Password"/>
+        </div>
+
+        <button type="submit" class="submit_button">Register</button>
+        <button class="redirect_button" >Sign in</button>
+    </div>
+    
+</EditForm>
+
+    
