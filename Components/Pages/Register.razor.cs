@@ -25,6 +25,14 @@ namespace BlazorApp5.Components
     public partial class Register : ComponentBase
     {
         public RegisterModel registerInstance = new RegisterModel();
+
+        [Parameter]
+        public EventCallback<string> redirect { get; set; }
+
+        public async Task redirectfunction()
+        {
+            await redirect.InvokeAsync("SignIn");
+        }
     }
 
 

@@ -20,11 +20,11 @@
     <div class="bottom">
         @if (activeTab == "SignIn")
         {
-            <SignIn />
+            <SignIn redirect="SetActiveTab" />
         }
         else if (activeTab == "Register")
         {
-            <Register />
+            <Register redirect="SetActiveTab" />
         }
     </div>
 
