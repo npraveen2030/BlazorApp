@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System.ComponentModel.DataAnnotations;
+using Authorization_Manager.Models;
+using Authorization_Manager.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Authorization_Manager.Components.Pages
 {
@@ -7,10 +10,10 @@ namespace Authorization_Manager.Components.Pages
     public class SignInModel
     {
         [Required(ErrorMessage = "Username is required")]
-        public string UserName { get; set; } = "";
+        public string Username { get; set; } = null!;
 
         [Required(ErrorMessage = "Password is required")]
-        public string Password { get; set; } = "";
+        public string Password { get; set; } = null!;
 
         public bool RememberMe { get; set; } = false;
 
@@ -31,5 +34,34 @@ namespace Authorization_Manager.Components.Pages
         }
 
         // Method to handle form submission
+        [Inject]
+        private AppDbContext _context { get; set; } = null!;
+
+        [Inject]
+        private NavigationManager Navigation { get; set; } = null!;
+
+        internal async Task HandleSignin()
+        {
+            var user = await _context.Users
+                        .FirstOrDefaultAsync(u => u.Username == signInInstance.Username);
+
+            if (user == null)
+            {
+                Console.WriteLine("User not found.");
+                return;
+            }
+
+            else if  (user.Password != signInInstance.Password)
+            {
+                Console.WriteLine("Invalid password.");
+                return;
+            }
+
+            else
+            {
+                Navigation.NavigateTo("/manager");
+            }
+                
+        }
     }
 }

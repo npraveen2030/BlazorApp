@@ -1,0 +1,35 @@
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10vh;
+    background-color: #D3D3D3;
+}
+
+.dashboard {
+    background-color: #F1F1F1;
+    height: 100vh;
+}
+
+.dashboard_container {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    justify-self: center;
+    column-gap: 20vw;
+    row-gap: 6vh;
+    margin-top: 10vh;
+
+    --WIDTH: 8vw;
+}
+
+button {
+    width: var(--WIDTH);
+    height: var(--WIDTH);
+    background-color: transparent;
+    border: none;
+}
+
+    button img {
+        width: var(--WIDTH);
+        height: var(--WIDTH);
+    }

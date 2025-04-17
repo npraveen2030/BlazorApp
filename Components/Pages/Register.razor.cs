@@ -38,7 +38,7 @@ namespace Authorization_Manager.Components.Pages
 
         [Inject]
         private AppDbContext _context { get; set; } = null!;
-        internal async Task HandleValidSubmit()
+        internal async Task HandleRegister()
         {
             try
             {

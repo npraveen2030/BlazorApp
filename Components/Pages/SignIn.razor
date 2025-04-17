@@ -2,12 +2,12 @@
 @rendermode InteractiveServer
 @using System.ComponentModel.DataAnnotations
 
-<EditForm Model="@signInInstance" >
+<EditForm Model="@signInInstance" OnValidSubmit="HandleSignin">
     <DataAnnotationsValidator />
     <ValidationSummary />
     <div class="input_container">
         <div class="input_wraper">
-            <InputText @bind-Value="signInInstance.UserName" placeholder="Username" />
+            <InputText @bind-Value="signInInstance.Username" placeholder="Username" />
         </div>
         
         <div class="input_wraper">
