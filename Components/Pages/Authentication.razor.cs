@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace BlazorApp5.Components
+namespace Authorization_Manager.Components.Pages
 {
     public partial class Authentication : ComponentBase
     {

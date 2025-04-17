@@ -1,37 +1,64 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System.ComponentModel.DataAnnotations;
+using Authorization_Manager.Models;
+using Authorization_Manager.Data;
 
-namespace BlazorApp5.Components
+namespace Authorization_Manager.Components.Pages
 {
+    // Model to hold the registration data
     public class RegisterModel
     {
-        [Required(ErrorMessage = "Email is required")]
-        public string Email { get; set; }
+        [Required(ErrorMessage = "Username is required")]
+        public string UserName { get; set; } = "";
 
         [Required(ErrorMessage = "Password is required")]
-        public string Password { get; set; }
+        public string Password { get; set; } = "";
 
         [Required(ErrorMessage = "Confirm Password is required")]
-        public string ConfirmPassword { get; set; }
+        [Compare("Password", ErrorMessage = "Passwords do not match")]
+        public string ConfirmPassword { get; set; } = "";
 
-        public RegisterModel()
-        {
-            Email = string.Empty;
-            Password = string.Empty;
-            ConfirmPassword = string.Empty;
-        }
     }
 
-    public partial class Register : ComponentBase
+   partial class Register : ComponentBase
     {
-        public RegisterModel registerInstance = new RegisterModel();
+        // RegisterModel instance to hold the form data
+        internal RegisterModel registerInstance = new();
 
+        // Redirecting to SignIn page
         [Parameter]
-        public EventCallback<string> redirect { get; set; }
+        public EventCallback<string> Redirect { get; set; }
 
-        public async Task redirectfunction()
+        internal async Task RedirectFunction()
         {
-            await redirect.InvokeAsync("SignIn");
+            await Redirect.InvokeAsync("SignIn");
+        }
+
+        // Method to handle form submission
+
+        [Inject]
+        private AppDbContext _context { get; set; } = null!;
+        internal async Task HandleValidSubmit()
+        {
+            try
+            {
+                var newUser = new User
+                {
+                    Username = registerInstance.UserName,
+                    Password = registerInstance.Password,
+                    LastLogin = DateTime.Now,
+                    CreatedDate = DateTime.Now,
+                    IsActive = true
+                };
+
+                _context.Users.Add(newUser);
+                await _context.SaveChangesAsync();
+                await RedirectFunction();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
         }
     }
 

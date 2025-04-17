@@ -4,44 +4,35 @@
       "windowsAuthentication": false,
       "anonymousAuthentication": true,
       "iisExpress": {
-        "applicationUrl": "http://localhost:17514",
-        "sslPort": 44376
+        "applicationUrl": "http://localhost:11821",
+        "sslPort": 44314
       }
     },
     "profiles": {
-        "login": {
-            "commandName": "Project",
-            "dotnetRunMessages": true,
-            "launchBrowser": true,
-            "applicationUrl": "http://localhost:5090;https://localhost:7090",
-            "environmentVariables": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
-            }
-        },
-        "http": {
-            "commandName": "Project",
-            "dotnetRunMessages": true,
-            "launchBrowser": true,
-            "applicationUrl": "http://localhost:5090",
-            "environmentVariables": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
-            }
-        },
-        "https": {
-            "commandName": "Project",
-            "dotnetRunMessages": true,
-            "launchBrowser": true,
-            "applicationUrl": "https://localhost:7133;http://localhost:5090",
-            "environmentVariables": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
-            }
-        },
-        "IIS Express": {
-            "commandName": "IISExpress",
-            "launchBrowser": true,
-            "environmentVariables": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
-            }
+      "http": {
+        "commandName": "Project",
+        "dotnetRunMessages": true,
+        "launchBrowser": true,
+        "applicationUrl": "http://localhost:5023",
+        "environmentVariables": {
+          "ASPNETCORE_ENVIRONMENT": "Development"
         }
+      },
+      "https": {
+        "commandName": "Project",
+        "dotnetRunMessages": true,
+        "launchBrowser": true,
+        "applicationUrl": "https://localhost:7229;http://localhost:5023",
+        "environmentVariables": {
+          "ASPNETCORE_ENVIRONMENT": "Development"
+        }
+      },
+      "IIS Express": {
+        "commandName": "IISExpress",
+        "launchBrowser": true,
+        "environmentVariables": {
+          "ASPNETCORE_ENVIRONMENT": "Development"
+        }
+      }
     }
   }

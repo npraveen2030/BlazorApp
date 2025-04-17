@@ -1,16 +1,14 @@
 ﻿<!-- Register -->
-@page "/register"
 @rendermode InteractiveServer
 @using System.ComponentModel.DataAnnotations
-@inherits BlazorApp5.Components.Register
 
-<EditForm Model="@registerInstance" >
+<EditForm Model="@registerInstance" OnValidSubmit="HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
     <div class="input_container">
         <div class="input_wraper">
-            <InputText @bind-Value="registerInstance.Email" placeholder="Email"/>
+            <InputText @bind-Value="registerInstance.UserName" placeholder="Username"/>
         </div>
 
         <div class="input_wraper">
@@ -22,9 +20,12 @@
         </div>
 
         <button type="submit" class="submit_button">Register</button>
-        <button class="redirect_button" @onclick="redirectfunction" >Sign in</button>
+        <button class="redirect_button" @onclick="RedirectFunction" >Sign in</button>
     </div>
     
 </EditForm>
+
+<NavLink class="nav-link" href="/userlist">User List</NavLink>
+
 
     
