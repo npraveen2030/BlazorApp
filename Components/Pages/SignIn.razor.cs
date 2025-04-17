@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Authorization_Manager.Models;
 using Authorization_Manager.Data;
 using Microsoft.EntityFrameworkCore;
+using Authorization_Manager.Session;
 
 namespace Authorization_Manager.Components.Pages
 {
@@ -18,7 +19,7 @@ namespace Authorization_Manager.Components.Pages
         public bool RememberMe { get; set; } = false;
 
     }
-
+    
     public partial class SignIn : ComponentBase
     {
         // SignInModel instance to hold the form data
@@ -40,6 +41,9 @@ namespace Authorization_Manager.Components.Pages
         [Inject]
         private NavigationManager Navigation { get; set; } = null!;
 
+        [Inject]
+        private UserSession Session { get; set; } = null!;
+
         internal async Task HandleSignin()
         {
             var user = await _context.Users
@@ -59,6 +63,10 @@ namespace Authorization_Manager.Components.Pages
 
             else
             {
+                Session.UserName = user.Username;
+                Session.UserRoleId = user.RoleId;
+                Session.IsAuthenticated = true;
+
                 Navigation.NavigateTo("/manager");
             }
                 

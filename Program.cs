@@ -1,6 +1,7 @@
 using Authorization_Manager.Components;
 using Authorization_Manager.Data;
 using Microsoft.EntityFrameworkCore;
+using Authorization_Manager.Session;
 
 namespace Authorization_Manager
 {
@@ -16,6 +17,8 @@ namespace Authorization_Manager
 
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            builder.Services.AddScoped<UserSession>();
 
             var app = builder.Build();
 
