@@ -8,7 +8,6 @@ using Authorization_Manager.Session;
 
 namespace Authorization_Manager.Components.Pages
 {
-    // Model to hold the sign-in data
     public class SignInModel
     {
         [Required(ErrorMessage = "Username is required")]
