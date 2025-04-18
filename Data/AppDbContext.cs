@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Authorization_Manager.Models;
-
-namespace Authorization_Manager.Data
+﻿namespace Authorization_Manager.Data
 {
     public class AppDbContext : DbContext
     {

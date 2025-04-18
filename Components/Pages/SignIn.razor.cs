@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Authorization_Manager.Models;
 using Authorization_Manager.Data;
 using Microsoft.EntityFrameworkCore;
+// Issue : @using Authorization_Manager.Data; is not working in _Imports.razor
 using Authorization_Manager.Session;
 
 namespace Authorization_Manager.Components.Pages
@@ -11,7 +12,7 @@ namespace Authorization_Manager.Components.Pages
     public class SignInModel
     {
         [Required(ErrorMessage = "Username is required")]
-        public string Username { get; set; } = null!;
+        public string UserName { get; set; } = null!;
 
         [Required(ErrorMessage = "Password is required")]
         public string Password { get; set; } = null!;
@@ -47,7 +48,7 @@ namespace Authorization_Manager.Components.Pages
         internal async Task HandleSignin()
         {
             var user = await _context.Users
-                        .FirstOrDefaultAsync(u => u.Username == signInInstance.Username);
+                        .FirstOrDefaultAsync(u => u.UserName == signInInstance.UserName);
 
             if (user == null)
             {
@@ -63,7 +64,7 @@ namespace Authorization_Manager.Components.Pages
 
             else
             {
-                Session.UserName = user.Username;
+                Session.UserName = user.UserName;
                 Session.UserRoleId = user.RoleId;
                 Session.IsAuthenticated = true;
 

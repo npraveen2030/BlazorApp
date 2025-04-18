@@ -7,7 +7,11 @@
 </div>
 
 <div class="dashboard_container"> 
-    <button><NavLink href="/userlist"><img src="images/dashboard_tile_1.png"/></NavLink></button>
+    @if (IsAdmin == true)
+    {
+        <button><NavLink href="/userlist"><img src="images/dashboard_tile_1.png"/></NavLink></button>
+    }
+    
     <button><img src="images/dashboard_tile_2.png"/></button>
     <button><img src="images/dashboard_tile_3.png"/></button>
     <button><img src="images/dashboard_tile_4.png"/></button>

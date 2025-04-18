@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-using System.ComponentModel.DataAnnotations;
-using Authorization_Manager.Models;
-using Authorization_Manager.Data;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Authorization_Manager.Components.Pages
 {
@@ -38,13 +35,14 @@ namespace Authorization_Manager.Components.Pages
 
         [Inject]
         private AppDbContext _context { get; set; } = null!;
+
         internal async Task HandleRegister()
         {
             try
             {
                 var newUser = new User
                 {
-                    Username = registerInstance.UserName,
+                    UserName = registerInstance.UserName,
                     Password = registerInstance.Password,
                     LastLogin = DateTime.Now,
                     CreatedDate = DateTime.Now,
