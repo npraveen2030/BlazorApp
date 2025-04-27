@@ -6,6 +6,5 @@ global using Microsoft.AspNetCore.Components;
 global using Microsoft.AspNetCore.Components.Web;
 global using Microsoft.EntityFrameworkCore;
 
-global using Authorization_Manager.Data;
-global using Authorization_Manager.Models;
-global using Authorization_Manager.Session;
+global using BlazorApp.Models;
+global using BlazorApp.Session;

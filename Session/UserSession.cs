@@ -1,4 +1,4 @@
-namespace Authorization_Manager.Session
+namespace BlazorApp.Session
 {
     public class UserSession
     {

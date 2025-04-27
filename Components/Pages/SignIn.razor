@@ -2,22 +2,22 @@
 @rendermode InteractiveServer
 @using System.ComponentModel.DataAnnotations
 
-<EditForm Model="@signInInstance" OnValidSubmit="HandleSignin">
+<EditForm Model="@SigninFormDetails" OnValidSubmit="HandleSignin">
     <DataAnnotationsValidator />
     <ValidationSummary />
     <div class="input_container">
         <div class="input_wraper">
-            <InputText @bind-Value="signInInstance.UserName" placeholder="Username" />
+            <InputText @bind-Value="SigninFormDetails.UserName" placeholder="Username" />
         </div>
         
         <div class="input_wraper">
-            <InputText @bind-Value="signInInstance.Password" InputType="password" placeholder="Password" />
+            <InputText @bind-Value="SigninFormDetails.Password" InputType="password" placeholder="Password" />
         </div>
 
-        <div class="checkbox">
-            <InputCheckbox @bind-Value="signInInstance.RememberMe" />
-            <label>Remember Me</label>
-        </div>
+        @* <div class="checkbox"> *@
+        @*     <InputCheckbox @bind-Value="signInInstance.RememberMe" /> *@
+        @*     <label>Remember Me</label> *@
+        @* </div> *@
         
         <button type="submit" class="submit_button">Sign in</button>
         <button class="redirect_button" @onclick="redirectfunction" >Register</button>

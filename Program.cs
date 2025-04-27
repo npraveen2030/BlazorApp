@@ -1,9 +1,6 @@
-using Authorization_Manager.Components;
-using Authorization_Manager.Data;
-using Microsoft.EntityFrameworkCore;
-using Authorization_Manager.Session;
+using BlazorApp.Components;
 
-namespace Authorization_Manager
+namespace BlazorApp
 {
     public class Program
     {
@@ -15,10 +12,8 @@ namespace Authorization_Manager
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 
-            builder.Services.AddDbContext<AppDbContext>(options =>
+            builder.Services.AddDbContext<AuthDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-            builder.Services.AddScoped<UserSession>();
 
             var app = builder.Build();
 

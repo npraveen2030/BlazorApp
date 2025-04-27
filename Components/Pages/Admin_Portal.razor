@@ -1,0 +1,120 @@
+﻿@page "/admin"
+@rendermode InteractiveServer
+
+<!-- NavBar -->
+<div class="text-bg-success p-3 d-flex align-items-center text-center mb-3 sticky-top">
+    <h1 class="mx-auto text-center mb-0">Admin Portal</h1>
+    <button type="button" class="btn btn-primary position-absolute end-0 me-5" data-bs-toggle="modal" data-bs-target="#AddUserModal">
+        Create New User
+    </button>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="AddUserModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="AddUserModalLabel">User Details</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <EditForm Model="@AdminAddUserForm" OnSubmit="AddUserSubmitHandler">
+                    <div class="d-flex flex-column align-items-center">
+                        <InputText @bind-Value="AdminAddUserForm.UserName" placeholder="Username" class="d-block mb-2 w-75" />
+                        <InputText @bind-Value="AdminAddUserForm.Password" placeholder="Password" class="d-block mb-3 w-75" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Add User</button>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Search Bar -->
+<div class="col-12 col-md-9 mx-auto mb-3 ">
+    <input type="text" class="form-control me-2" placeholder="Search by username..." @bind="searchText" />
+   aa <button class="btn btn-success" @onclick="SearchUsers">Enter</button>bb
+</div>
+
+<!-- Data Table -->
+<div class="col-12 col-md-9 mx-auto">
+    <table class="table table-responsive table-striped table-bordered">
+        <thead>
+            <tr>
+                <th class="text-center">UserId</th>
+                <th class="text-center input_container_dimensions">UserName</th>
+                <th class="text-center input_container_dimensions">Password</th>
+                <th class="text-center">CreatedDate</th>
+                <th class="text-center">CreatedBy</th>
+                <th class="text-center">ModifiedDate</th>
+                <th class="text-center">ModifiedBy</th>
+                <th class="text-center">Status</th>
+                <th class="text-center">Edit</th>
+                <th class="text-center">Delete</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            @if (PaginatedUsers != null)
+            {
+                foreach (var user in PaginatedUsers)
+                {
+                    <tr>
+                        <td class="text-center">@user.UserId</td>
+                        @if (user.IsEdit == false)
+                        {
+                            <td class="text-center input_container_dimensions">@user.UserName</td>
+                            <td class="text-center input_container_dimensions">@user.Password</td>
+                        }
+                        else
+                        {
+                            <td class="text-center input_container_dimensions"><input @bind-value="user.UserName" class="" /></td>
+                            <td class="text-center input_container_dimensions"><input @bind-value="user.Password" class="" /></td>
+                        }
+                        <td class="text-center">@user.CreatedDate</td>
+                        <td class="text-center">@user.CreatedBy</td>
+                        <td class="text-center">@((user.ModifiedDate?.ToString() ?? "-"))</td>
+                        <td class="text-center">@((user.ModifiedBy?.ToString() ?? "-"))</td>
+                        <td class="text-center">@user.IsActive</td>
+
+                        @if (user.IsEdit == false)
+                        {
+                            <td class="text-center"><button type="button" class="btn btn-primary equal-width-btn" @onclick="() => HandleEdit(user)">Edit</button></td>
+                            <td class="text-center"><button type="button" class="btn btn-danger" @onclick="() => HandleEdit(user)">Delete</button></td>
+                        }
+                        else
+                        {
+                            <td class="text-center">
+                                <button type="button" class="btn btn-success equal-width-btn" @onclick="() => HandleSubmit(user)">Save</button>
+                            </td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-warning" @onclick="() => HandleCancel(user)">Cancel</button>
+                            </td>
+                        }
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <nav>
+        <ul class="pagination justify-content-center">
+            <li class="page-item @(PaginatedUsers?.HasPreviousPage == true ? "" : "disabled")">
+                <button class="page-link" @onclick="PreviousPage">Previous</button>
+            </li>
+
+            @for (int i = 1; i <= (PaginatedUsers?.TotalPages ?? 0); i++)
+            {
+                <li class="page-item @(i == CurrentPage ? "active" : "")">
+                    <button class="page-link" @onclick="() => GoToPage(i)">@i</button>
+                </li>
+            }
+
+            <li class="page-item @(PaginatedUsers?.HasNextPage == true ? "" : "disabled")">
+                <button class="page-link" @onclick="NextPage">Next</button>
+            </li>
+        </ul>
+    </nav>
+</div>

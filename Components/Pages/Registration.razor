@@ -1,0 +1,32 @@
+﻿<!-- Registration -->
+@rendermode InteractiveServer
+@using System.ComponentModel.DataAnnotations
+
+<EditForm Model="@RegFormDetails" OnValidSubmit="HandleRegister">
+    <DataAnnotationsValidator /> 
+
+    <div class="input_container"> 
+        <div class="input_wraper"> 
+            <InputText @bind-Value="RegFormDetails.UserName" placeholder="Username" /> 
+        </div> 
+
+        <div class="input_wraper"> 
+            <InputText @bind-Value="RegFormDetails.Password" InputType="password" placeholder="Password" /> 
+        </div> 
+
+        @* <div class="input_wraper">  *@
+        @*     <InputText @bind-Value="RegFormDetails.ConfirmPassword" InputType="password" placeholder="Confirm Password" />  *@
+        @* </div>  *@
+
+        <ValidationSummary />
+
+        <button type="submit" class="submit_button">Register</button> 
+        <button class="redirect_button" @onclick="RedirectFunction" >Sign in</button> 
+    </div> 
+ 
+</EditForm> 
+
+<NavLink class="nav-link" href="/userlist">User List</NavLink>
+
+
+    
