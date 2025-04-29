@@ -38,10 +38,10 @@
 
 		<!-- Search Bar -->
 
-		@* <div class="d-flex mb-3 "> *@
-		@* 	<input type="text" class="form-control me-2 w-25" placeholder="Search by username..." @bind="searchText" /> *@
-		@* 	<button class="btn btn-info" @onclick="SearchUsers">Enter</button> *@
-		@* </div> *@
+		<div class="d-flex mb-3 ">
+			<input type="text" class="form-control me-2 w-25" placeholder="Search by username..." @bind="SearchText" />
+			<button class="btn btn-info" @onclick="SearchUsers">Enter</button>
+		</div>
 
 		<!-- Add User -->
 
@@ -70,7 +70,7 @@
 					</tr>
 				</thead>
 
-				<tbody class="table-group-divider">
+				<tbody >
 					@if (UserDetails != null)
 					{
 						foreach (var user in UserDetails)
@@ -117,24 +117,35 @@
 		<!-- Pagination -->
 		<nav >
 			<ul class="pagination justify-content-center">
-				<li class="page-item @(IsPrevious ? "" : "disabled")">
-					<button class="page-link" @onclick="PreviousPage">Previous</button>
+				<li class="page-item @(pagination.IsPrevious ? "" : "disabled")">
+					<button class="page-link" @onclick="pagination.PreviousPage">Previous</button>
 				</li>
 
-				@for (int i = 1; i <= TotalPages; i++)
+				@for (int i = 1; i <= pagination.TotalPages; i++)
 				{
 					int PageNumber = i;
 
-					<li class="page-item @(PageNumber == CurrentPage ? "active" : "")">
-						<button class="page-link" @onclick="()=>ChangePage(PageNumber)">@PageNumber</button>
+					<li class="page-item @(PageNumber == pagination.CurrentPage ? "active" : "")">
+						<button class="page-link" @onclick="()=>pagination.ChangePage(PageNumber)">@PageNumber</button>
 					</li>
 				}
 
-				<li class="page-item @(IsNext ? "" : "disabled")">
-					<button class="page-link" @onclick="NextPage">Next</button>
+				<li class="page-item @(pagination.IsNext ? "" : "disabled")">
+					<button class="page-link" @onclick="pagination.NextPage">Next</button>
 				</li>
 			</ul>
 		</nav>
+
+		@* <div class="dropup-center dropup dropup-custom"> *@
+		@* 	<button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"> *@
+		@* 		Centered dropup *@
+		@* 	</button> *@
+		@* 	<ul class="dropdown-menu"> *@
+		@* 		<li><a class="dropdown-item" href="#">Action</a></li> *@
+		@* 		<li><a class="dropdown-item" href="#">Action two</a></li> *@
+		@* 		<li><a class="dropdown-item" href="#">Action three</a></li> *@
+		@* 	</ul> *@
+		@* </div> *@
 	</div>
 
 </div>

@@ -4,18 +4,3 @@
     box-sizing: border-box;
 }
 
-.table-fs,
-.table-fs th,
-.table-fs td {
-    font-size: 0.75rem;
-}
-
-.table-container {
-    min-height : 62vh;
-}
-
-.table-custom th,
-.table-custom td {
-    text-align: center;
-}
-
