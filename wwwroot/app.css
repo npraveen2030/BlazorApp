@@ -49,17 +49,3 @@ h1:focus {
 .darker-border-checkbox.form-check-input {
     border-color: #929292;
 }
-
-.equal-width-btn {
-    width: 70px; /* Or whatever width you want */
-}
-
-.input_container_dimensions {
-    width: 800px; /* or whatever width you prefer */
-}
-
-    .input_container_dimensions input {
-        width: 100%; /* make input fill the container */
-        box-sizing: border-box; /* ensure padding does not overflow */
-        height: 38px; /* optional: match Bootstrap button height */
-    }

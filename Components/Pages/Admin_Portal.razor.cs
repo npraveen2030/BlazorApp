@@ -6,8 +6,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BlazorApp.Components.Pages
 {
-
-
     public partial class Admin_Portal : ComponentBase
     {
         [Inject] public AuthDbContext Context { get; set; } = null!;
@@ -15,21 +13,14 @@ namespace BlazorApp.Components.Pages
         [Inject] public IJSRuntime JS { get; set; } = null!;
 
         public UserDetailDto AdminAddUserForm { get; set; } = new();
-        public List<UserDetailDto> AllUsers { get; set; } = new();
+        public List<UserDetailDto> UserDetails { get; set; } = new();
 
-        public PaginatedList<UserDetailDto> PaginatedUsers { get; set; } = null!;
-        public int CurrentPage { get; set; } = 1;
-        public int PageSize { get; set; } = 8;
-        public string searchText = string.Empty;
+        
 
-        protected override async Task OnInitializedAsync()
-        {
-            await LoadUsers();
-        }
-
+        // Page Based Users Retrival from DB
         private async Task LoadUsers()
         {
-            AllUsers = await Context.UserDetails
+            UserDetails = await Context.UserDetails
                 .Select(u => new UserDetailDto
                 {
                     UserId = u.UserId,
@@ -41,21 +32,101 @@ namespace BlazorApp.Components.Pages
                     ModifiedDate = u.ModifiedDate,
                     IsActive = u.IsActive
                 })
+                .Skip((CurrentPage-1)*PageSize)
+                .Take(PageSize)
                 .ToListAsync();
 
-            ApplyFilters();
         }
 
-        private void ApplyFilters()
+        public void PageNavigators()
         {
-            var filtered = AllUsers
-                .Where(u => string.IsNullOrWhiteSpace(searchText) || u.UserName.StartsWith(searchText, StringComparison.OrdinalIgnoreCase))
-                .ToList();
-
-            PaginatedUsers = PaginatedList<UserDetailDto>.CreateFromList(filtered, CurrentPage, PageSize);
-            StateHasChanged();
+            if (CurrentPage == 1)
+            {
+                IsPrevious = false;
+                IsNext = true;
+            }
+            else if (CurrentPage == TotalPages)
+            {
+                IsPrevious = true;
+                IsNext = false;
+            }
+            else
+            {
+                IsPrevious = true;
+                IsNext = true;
+            }
         }
 
+        protected override async Task OnInitializedAsync()
+        {
+            TotalPages = (await Context.UserDetails.CountAsync() / PageSize) + 1;
+            PageNavigators();
+            await LoadUsers();
+        }
+
+        // Pagination
+
+        public int CurrentPage { get; set; } = 1;
+        public int PageSize { get; set; } = 8;
+
+        public int TotalPages { get; set; }
+
+        public bool IsPrevious { get; set; } 
+
+        public bool IsNext { get; set; } 
+
+        internal async Task ChangePage(int pageNumber)
+        {
+            try
+            {
+                CurrentPage = pageNumber;
+                PageNavigators();
+                await LoadUsers();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error Message : "+ex);
+            }
+            
+        }
+
+        internal async Task PreviousPage()
+        {
+            try
+            {
+                if (IsPrevious)
+                {
+                    CurrentPage = CurrentPage - 1;
+                    PageNavigators();
+                    await LoadUsers();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error Message : " + ex);
+            }
+        }
+
+        internal async Task NextPage()
+        {
+            try
+            {
+                if (IsNext)
+                {
+                    CurrentPage = CurrentPage + 1;
+                    PageNavigators();
+                    await LoadUsers();
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error Message : " + ex);
+            }
+        }
+
+
+        // Adding a User
         internal async Task AddUserSubmitHandler()
         {
             try
@@ -85,6 +156,7 @@ namespace BlazorApp.Components.Pages
             }
         }
 
+        // Editing a user
         public bool Editing { get; set; } = false;
 
         internal async Task HandleEdit(UserDetailDto user)
@@ -125,62 +197,6 @@ namespace BlazorApp.Components.Pages
             Editing = false;
         }
 
-        // Pagination handlers
-        private void GoToPage(int page)
-        {
-            CurrentPage = page;
-            ApplyFilters();
-        }
-
-        private void PreviousPage()
-        {
-            if (PaginatedUsers.HasPreviousPage)
-            {
-                CurrentPage--;
-                ApplyFilters();
-            }
-        }
-
-        private void NextPage()
-        {
-            if (PaginatedUsers.HasNextPage)
-            {
-                CurrentPage++;
-                ApplyFilters();
-            }
-        }
-
-        // Search handler
-        private void SearchUsers()
-        {
-            CurrentPage = 1;
-            ApplyFilters();
-        }
-
-        public class PaginatedList<T> : List<T>
-        {
-            public int PageIndex { get; private set; }
-            public int TotalPages { get; private set; }
-
-            public PaginatedList(List<T> items, int count, int pageIndex, int pageSize)
-            {
-                PageIndex = pageIndex;
-                TotalPages = (int)Math.Ceiling(count / (double)pageSize);
-                AddRange(items);
-            }
-
-            public bool HasPreviousPage => PageIndex > 1;
-            public bool HasNextPage => PageIndex < TotalPages;
-
-            public static PaginatedList<T> CreateFromList(List<T> sourceList, int pageIndex, int pageSize)
-            {
-                var count = sourceList.Count;
-                var items = sourceList
-                    .Skip((pageIndex - 1) * pageSize)
-                    .Take(pageSize)
-                    .ToList();
-                return new PaginatedList<T>(items, count, pageIndex, pageSize);
-            }
-        }
+        
     }
 }
