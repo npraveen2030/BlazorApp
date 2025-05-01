@@ -18,7 +18,7 @@ namespace BlazorApp.Components.Pages
         public Pagination pagination { get; set; } = null!;
 
         public string SearchText { get; set; } = null!;
-        public class Pagination(AuthDbContext Context , Func<int, int, Task> LoadUsers)
+        public class Pagination(AuthDbContext Context , Func<int, int, Task> LoadUsers, Action ChangeIsOrderCD , Action ChangeIsOrderMD)
         {
             public int CurrentPage { get; set; } = 1;
             public int PageSize { get; set; } = 10;
@@ -45,9 +45,19 @@ namespace BlazorApp.Components.Pages
                 }
             }
 
-            public async Task PageCount(string SearchText)
+            public async Task PageCount(string SearchText , string SelectedFilterValue)
             {
                 var query = Context.UserDetails.AsQueryable();
+
+                if (SelectedFilterValue == "active")
+                {
+                    query = query.Where(u => u.IsActive == true);
+                }
+
+                if (SelectedFilterValue == "inactive")
+                {
+                    query = query.Where(u => u.IsActive == false);
+                }
 
                 if (!string.IsNullOrWhiteSpace(SearchText))
                 {
@@ -63,6 +73,8 @@ namespace BlazorApp.Components.Pages
                 {
                     CurrentPage = pageNumber;
                     PageNavigators();
+                    ChangeIsOrderCD();
+                    ChangeIsOrderMD();
                     await LoadUsers(CurrentPage, PageSize);
                 }
                 catch (Exception ex)
@@ -80,6 +92,8 @@ namespace BlazorApp.Components.Pages
                     {
                         CurrentPage = CurrentPage - 1;
                         PageNavigators();
+                        ChangeIsOrderCD();
+                        ChangeIsOrderMD();
                         await LoadUsers(CurrentPage , PageSize);
                     }
                 }
@@ -97,6 +111,8 @@ namespace BlazorApp.Components.Pages
                     {
                         CurrentPage = CurrentPage + 1;
                         PageNavigators();
+                        ChangeIsOrderCD();
+                        ChangeIsOrderMD();
                         await LoadUsers(CurrentPage, PageSize);
                     }
 
@@ -106,19 +122,42 @@ namespace BlazorApp.Components.Pages
                     Console.WriteLine("Error Message : " + ex);
                 }
             }
+            public async Task ChangePageSize(int pageSize)
+            {
+                PageSize = pageSize;
+                CurrentPage = 1;
+                await LoadUsers(CurrentPage, PageSize);
+            }
         }
 
         public async Task LoadUsers(int CurrentPage , int PageSize )
         {
-            await pagination.PageCount(SearchText);
+            await pagination.PageCount(SearchText, SelectedFilterValue);
             pagination.PageNavigators();
 
             var query = Context.UserDetails.AsQueryable();
 
+            // Filtering
+            if (SelectedFilterValue == "active")
+            {
+                query = query.Where(u => u.IsActive == true);
+            }
+
+            if (SelectedFilterValue == "inactive")
+            {
+                query = query.Where(u => u.IsActive == false);
+            }
+
+            // Searching
             if (!string.IsNullOrWhiteSpace(SearchText))
             {
                 query = query.Where(u => u.UserName.Contains(SearchText));
             }
+
+            // Resetting Order
+            Ascorder = true;
+            IsOrderonCreateDate = false;
+            IsOrderonModifyDate = false;
 
             UserDetails = await query
                 .Select(u => new UserDetailDto
@@ -126,9 +165,15 @@ namespace BlazorApp.Components.Pages
                     UserId = u.UserId,
                     UserName = u.UserName,
                     Password = u.Password,
-                    CreatedBy = u.CreatedBy,
+                    CreatedBy = Context.UserDetails
+                                .Where(c => c.UserId == u.CreatedBy)
+                                .Select(c => c.UserName)
+                                .FirstOrDefault(),
                     CreatedDate = u.CreatedDate,
-                    ModifiedBy = u.ModifiedBy,
+                    ModifiedBy = Context.UserDetails
+                                .Where(c => c.UserId == u.ModifiedBy)
+                                .Select(c => c.UserName)
+                                .FirstOrDefault(),
                     ModifiedDate = u.ModifiedDate,
                     IsActive = u.IsActive
                 })
@@ -140,16 +185,94 @@ namespace BlazorApp.Components.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            pagination = new Pagination(Context,LoadUsers);
+            pagination = new Pagination(Context,LoadUsers, ChangeIsOrderCD , ChangeIsOrderMD);
             await LoadUsers(pagination.CurrentPage , pagination.PageSize);
         }
 
-        // Filtering  
+        // Searching
 
         internal async Task SearchUsers()
         {
             await LoadUsers(pagination.CurrentPage, pagination.PageSize);
 
+        }
+
+        // Ordering
+
+        public bool Ascorder { get; set; } = true;
+        
+        public void Reorder()
+        {
+            if(Ascorder)
+            {
+                UserDetails.Reverse();
+                Ascorder = false;
+            }
+            else
+            {
+                UserDetails.Reverse();
+                Ascorder = true;
+            }
+        }
+
+        // on created date
+        public bool IsOrderonCreateDate {  get; set; } = false;
+        internal void OrderCreatedDate()
+        {
+            ChangeIsOrderMD();
+
+            if (IsOrderonCreateDate == false)
+            {
+                UserDetails = UserDetails.OrderBy(c => c.CreatedDate).ToList();
+                IsOrderonCreateDate = true;
+            }
+            else
+            {
+                UserDetails = UserDetails.OrderBy(c => c.UserId).ToList();
+                IsOrderonCreateDate = false;
+            }
+            
+        }
+
+        public void ChangeIsOrderCD()
+        {
+            IsOrderonCreateDate = false;
+            Ascorder = true;
+        }
+
+        // on modified date
+        public bool IsOrderonModifyDate { get; set; } = false;
+        internal void OrderModifyDate()
+        {
+            ChangeIsOrderCD();
+
+            if (IsOrderonModifyDate == false)
+            {
+                UserDetails = UserDetails.OrderBy(c => c.ModifiedDate).ToList();
+                IsOrderonModifyDate = true;
+            }
+            else
+            {
+                UserDetails = UserDetails.OrderBy(c => c.UserId).ToList();
+                IsOrderonModifyDate = false;
+            }
+
+        }
+
+        public void ChangeIsOrderMD()
+        {
+            IsOrderonModifyDate = false;
+            Ascorder = true;
+        }
+
+        // Filtering
+
+        public string SelectedFilterValue { get; set; } = "all";
+
+        internal async Task OnFilterChanged(ChangeEventArgs e)
+        {
+            SelectedFilterValue = e.Value?.ToString();
+            await LoadUsers(pagination.CurrentPage, pagination.PageSize);
         }
 
         // Adding a User
@@ -211,6 +334,7 @@ namespace BlazorApp.Components.Pages
                 modified_user.Password = user.Password;
                 modified_user.ModifiedBy = 1;
                 modified_user.ModifiedDate = DateOnly.FromDateTime(DateTime.Now);
+                modified_user.IsActive = user.IsActive;
                 await Context.SaveChangesAsync();
             }
 
@@ -223,6 +347,36 @@ namespace BlazorApp.Components.Pages
             Editing = false;
         }
 
-        
+        // Toggling a user
+
+        public UserDetailDto? DeleteConfirmationuser { get; set; } 
+
+        internal async Task HandleInActive(UserDetailDto user)
+        {
+            var toggled_user = Context.UserDetails.FirstOrDefault(u => u.UserId == user.UserId);
+
+            if (toggled_user != null)
+            {
+                toggled_user.IsActive = false;
+                await Context.SaveChangesAsync();
+            }
+
+            await JS.InvokeVoidAsync("bootstrapInterop.hideModal", "#DeleteConfirmationModal");
+            await LoadUsers(pagination.CurrentPage, pagination.PageSize);
+        }
+
+        internal async Task HandleActive(UserDetailDto user)
+        {
+
+            var toggled_user = Context.UserDetails.FirstOrDefault(u => u.UserId == user.UserId);
+
+            if (toggled_user != null)
+            {
+                toggled_user.IsActive = true;
+                await Context.SaveChangesAsync();
+            }
+
+            await LoadUsers(pagination.CurrentPage, pagination.PageSize);
+        }
     }
 }

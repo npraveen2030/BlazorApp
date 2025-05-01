@@ -14,6 +14,12 @@
     text-align: center;
 }
 
+.table-custom {
+    border-collapse: separate !important;
+    border-spacing: 0;
+}
+
+
 .table-custom thead th {
     position: sticky;
     top: 0;
@@ -21,6 +27,17 @@
     z-index: 1;
 }
 
-.dropup-custom {
-    display : inline-block;
+.button-custom {
+    width : 100%;
+    height : 100%;
+    font: inherit;
+    background-color: transparent;
+    border : none;
+}
+
+.button-reorder {
+    display: inline-block;
+    width: 20px;
+    background-color: transparent;
+    border: none;
 }
