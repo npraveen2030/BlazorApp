@@ -206,28 +206,6 @@ namespace BlazorApp.Components.Pages
             await LoadUPRAs(pagination.CurrentPage, pagination.PageSize);
         }
 
-        // [JSInvokable]
-        // public void ResetUpraForm()
-        // {
-        //     Upraform.UserId = 0;
-        //     Upraform.ProjectId = 0;
-        //     StateHasChanged();
-        // }
-
-        // protected override async Task OnAfterRenderAsync(bool firstRender)
-        // {
-        //     if (firstRender)
-        //     {
-        //         _dotNetRef = DotNetObjectReference.Create(this);
-        //         await JS.InvokeVoidAsync("bootstrapInterop.registerModalClose", "#AddUpraModal", _dotNetRef);
-        //     }
-        // }
-
-        // public void Dispose()
-        // {
-        //     _dotNetRef?.Dispose();
-        // }
-
         // Searching
 
         internal async Task SearchUPRAs()
@@ -330,11 +308,7 @@ namespace BlazorApp.Components.Pages
                                               UserName = u.UserName
                                           })
                                           .ToListAsync();
-            // await JS.InvokeVoidAsync("bootstrapInterop.showModal", "#AddUpraModal");
-            selection = new(); // Reset form
-            FilteredProjects.Clear();
-            // JS.InvokeVoidAsync("$('#userProjectModal').modal', 'show'"); // Bootstrap Modal show 
-            await JS.InvokeVoidAsync("bootstrapInterop.showModal", "#userProjectModal");
+            await JS.InvokeVoidAsync("bootstrapInterop.showModal", "#AddUpraModal");
         }
 
         public int UserId_bind
@@ -345,7 +319,11 @@ namespace BlazorApp.Components.Pages
                 if (Upraform.UserId != value)
                 {
                     Upraform.UserId = value;
-                    SelectedUserHandler(value);
+                    if (value != 0)
+                    {
+                        _ = SelectedUserHandler(value);
+                    }
+
                 }
             }
         }
@@ -357,22 +335,22 @@ namespace BlazorApp.Components.Pages
         internal async Task SelectedUserHandler(int value)
         {
 
-            // Upraform.UserId = Convert.ToInt32(e.Value);
-            // activeProjects = await Context.Projects
-            //                               .Where(p => p.ProjectName != null)
-            //                               .Select(p => new ActiveProjects
-            //                               {
-            //                                   ProjectId = p.ProjectId,
-            //                                   ProjectName = p.ProjectName ?? ""
-            //                               })
-            //                               .ToListAsync();
+            activeProjects = await Context.Projects
+                                          .Where(p => p.ProjectName != null)
+                                          .Select(p => new ActiveProjects
+                                          {
+                                              ProjectId = p.ProjectId,
+                                              ProjectName = p.ProjectName ?? ""
+                                          })
+                                          .ToListAsync();
 
-            // UserAssociatedProjects = await Context.UserProjectRoleAssociations
-            //                                       .Where(a => a.UserId == Upraform.UserId && a.IsActive)
-            //                                       .Select(a => a.ProjectId)
-            //                                       .ToListAsync();
+            UserAssociatedProjects = await Context.UserProjectRoleAssociations
+                                                  .Where(a => a.UserId == value && a.IsActive)
+                                                  .Select(a => a.ProjectId)
+                                                  .ToListAsync();
 
-            // inactiveProjects = activeProjects.Where(a => !UserAssociatedProjects.Contains(a.ProjectId)).ToList();
+            inactiveProjects = activeProjects.Where(a => !UserAssociatedProjects.Contains(a.ProjectId)).ToList();
+            StateHasChanged();
         }
 
         internal async Task AddUpraSubmitHandler()
@@ -392,6 +370,9 @@ namespace BlazorApp.Components.Pages
                 Context.UserProjectRoleAssociations.Add(newUPRA);
                 await Context.SaveChangesAsync();
 
+                UserId_bind = 0;
+                Upraform.ProjectId = 0;
+
                 await JS.InvokeVoidAsync("bootstrapInterop.hideModal", "#AddUpraModal");
                 await LoadUPRAs(pagination.CurrentPage, pagination.PageSize);
             }
@@ -400,9 +381,6 @@ namespace BlazorApp.Components.Pages
                 Console.WriteLine($"Error: {ex.Message}");
             }
         }
-
-
-
 
         // Toggling a upra
 
@@ -436,103 +414,5 @@ namespace BlazorApp.Components.Pages
             await LoadUPRAs(pagination.CurrentPage, pagination.PageSize);
         }
 
-        ///
-        /// ///
-        ///  
-        private bool showModal = false;
-
-        // Sample Data
-        private List<User> Users = new()
-    {
-        new User { UserId = 1, Username = "Alice" },
-        new User { UserId = 2, Username = "Bob" }
-    };
-
-        private List<Project> AllProjects = new()
-    {
-        new Project { ProjectId = 101, ProjectName = "Project A", UserId = 1 },
-        new Project { ProjectId = 102, ProjectName = "Project B", UserId = 1 },
-        new Project { ProjectId = 201, ProjectName = "Project X", UserId = 2 }
-    };
-
-        private List<Project> FilteredProjects = new();
-        private SelectionModel selection = new();
-
-        private void OpenModal()
-        {
-            selection = new(); // Reset form
-            FilteredProjects.Clear();
-            JS.InvokeVoidAsync("$('#userProjectModal').modal', 'show'"); // Bootstrap Modal show
-        }
-
-        private void CloseModal()
-        {
-            JS.InvokeVoidAsync("$('#userProjectModal').modal', 'hide'"); // Bootstrap Modal hide
-        }
-
-        private void HandleSubmit()
-        {
-            Console.WriteLine($"Submitted: UserId={selection.SelectedUserId}, ProjectId={selection.SelectedProjectId}");
-            CloseModal();
-        }
-
-        private void UserChangedNew(ChangeEventArgs e)
-        {
-            if (int.TryParse(e.Value?.ToString(), out var userId))
-            {
-                selection.SelectedUserId = userId;
-                FilteredProjects = AllProjects.Where(p => p.UserId == userId).ToList();
-                selection.SelectedProjectId = null; // Reset Project selection
-            }
-        }
-
-        // // Models
-        // public class User
-        // {
-        //     public int UserId { get; set; }
-        //     public string Username { get; set; }
-        // }
-
-        // public class Project
-        // {
-        //     public int ProjectId { get; set; }
-        //     public string ProjectName { get; set; }
-        //     public int UserId { get; set; }
-        // }
-
-        public class SelectionModel
-        {
-            [Required(ErrorMessage = "User is required")]
-            public int? SelectedUserId { get; set; }
-
-            [Required(ErrorMessage = "Project is required")]
-            public int? SelectedProjectId { get; set; }
-        }
     }
 }
-// Models
-public class User
-{
-    public int UserId { get; set; }
-    public string Username { get; set; }
-}
-
-// public class Project
-// {
-//     public int ProjectId { get; set; }
-//     public string ProjectName { get; set; }
-//     public int UserId { get; set; }
-//     public bool IsActive { get; set; }
-
-//     public DateOnly? CreatedDate { get; set; }
-
-//     public string? CreatedBy { get; set; }
-
-//     public DateOnly? ModifiedDate { get; set; }
-
-//     public string? ModifiedBy { get; set; }
-
-//     // public bool IsActive { get; set; } = true;
-
-//     public bool IsEdit { get; set; } = false;
-// }

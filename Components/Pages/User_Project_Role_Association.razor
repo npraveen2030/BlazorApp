@@ -1,69 +1,61 @@
 @rendermode InteractiveServer
 @using Microsoft.AspNetCore.Components.Forms
 
-<EditForm Model="@selection" OnValidSubmit="HandleSubmit">
-	<DataAnnotationsValidator />
-	<ValidationSummary />
-
-	<!-- Modal Popup using Bootstrap -->
-	<div class="modal fade" id="userProjectModal" tabindex="-1" aria-labelledby="userProjectModalLabel"
-		aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="userProjectModalLabel">Select User and Project</h5>
-					@* <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-						@onclick="CloseModal"></button> *@
-				</div>
-				<div class="modal-body">
-					<!-- User Dropdown -->
-					<div class="mb-3">
-						<label for="userSelect">User</label>
-						@* <select id="userSelect" class="form-select" @bind="selection.SelectedUserId"
-						>
-							<option value="">-- Select User --</option>
-							@foreach (var user in Users)
+<!-- Modal to Add User -->
+<div class="modal fade" id="AddUpraModal" tabindex="-1" aria-labelledby="UPRAModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h1 class="modal-title fs-5" id="AddUpraModal">UPRA Details</h1>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form @onsubmit="AddUpraSubmitHandler">
+					<label for="User">Select a User:</label>
+					<select id="User" @bind="UserId_bind">
+						<option value="0">-- Select --</option>
+						@if (activeUsers is not null)
+						{
+							@foreach (var user in activeUsers)
 							{
-								<option value="@user.UserId">@user.Username</option>
+								<option value="@user.UserId">@user.UserName</option>
 							}
-						</select> *@
-						<select id="userSelect" class="form-select" @onchange="UserChangedNew">
-							<option value="">-- Select User --</option>
-							@foreach (var user in Users)
-							{
-								<option value="@user.UserId" selected="@(selection.SelectedUserId == user.UserId)">
-									@user.Username
-								</option>
-							}
-						</select>
-						<ValidationMessage For="@(() => selection.SelectedUserId)" />
-					</div>
+						}
+						else
+						{
+							<option value="">No Users Found</option>
+						}
 
-					<!-- Project Dropdown -->
-					<div class="mb-3">
-						<label for="projectSelect">Project</label>
-						@* <select id="projectSelect" class="form-select" @bind="selection.SelectedProjectId"
-							@onchange="UserChangedNew">
-							<option value="">-- Select Project --</option>
-							@foreach (var project in FilteredProjects)
+					</select>
+
+					<label for="User">Select a Project:</label>
+					<select id="Project" @bind="Upraform.ProjectId">
+						<option value="0">-- Select --</option>
+						@if (inactiveProjects is not null)
+						{
+							@foreach (var project in inactiveProjects)
 							{
 								<option value="@project.ProjectId">@project.ProjectName</option>
 							}
-						</select> *@
-						<ValidationMessage For="@(() => selection.SelectedProjectId)" />
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="submit" class="btn btn-success">Submit</button>
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-						@onclick="CloseModal">Cancel</button>
-				</div>
+						}
+						else
+						{
+							<option value="">Select User</option>
+						}
+
+					</select>
+
+					<button type="submit">Submit</button>
+				</form>
 			</div>
 		</div>
 	</div>
-</EditForm>
-@* <!-- Modal to conform delete -->
-<div class="modal fade" id="DeleteConfirmationModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+</div>
+
+
+<!-- Modal to conform delete -->
+<div class="modal fade" id="DeleteConfirmationModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+	aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -71,18 +63,21 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-				@if (DeleteConfirmationuser is not null)
+				@if (DeleteConfirmationupra is not null)
 				{
-					<p>@(DeleteConfirmationuser.UserName) will be removed</p>
+					<p>@(DeleteConfirmationupra.UserName)'s Association with the Project
+						@(DeleteConfirmationupra.ProjectName)
+						will be removed</p>
 				}
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" @onclick="() =>HandleInActive(DeleteConfirmationuser)">Delete</button>
+				<button type="button" class="btn btn-primary"
+					@onclick="() => HandleInActive(DeleteConfirmationupra)">Delete</button>
 				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 			</div>
 		</div>
 	</div>
-</div> *@
+</div>
 
 
 <div class="user-manager-container w-75 mx-auto">
