@@ -1,0 +1,47 @@
+.table-fs,
+.table-fs th,
+.table-fs td {
+    font-size: 0.75rem;
+}
+
+.table-container {
+    height: 62vh;
+    overflow-y: auto;
+}
+
+.table-custom th,
+.table-custom td {
+    text-align: center;
+}
+
+.table-custom {
+    border-collapse: separate !important;
+    border-spacing: 0;
+}
+
+
+.table-custom thead th {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 1;
+}
+
+.button-custom {
+    width : 100%;
+    height : 100%;
+    font: inherit;
+    background-color: transparent;
+    border : none;
+}
+
+.button-reorder {
+    display: inline-block;
+    width: 20px;
+    background-color: transparent;
+    border: none;
+}
+
+.fs-custom {
+    font-size: 0.75rem;
+}

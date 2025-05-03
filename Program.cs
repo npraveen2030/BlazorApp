@@ -14,6 +14,12 @@ namespace BlazorApp
 
             builder.Services.AddDbContext<AuthDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+                
+            builder.Services.AddServerSideBlazor()
+                .AddCircuitOptions(options => 
+                {
+                    options.DetailedErrors = true;
+                });
 
             var app = builder.Build();
 

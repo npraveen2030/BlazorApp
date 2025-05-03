@@ -10,6 +10,7 @@ public partial class Project
 {
     [Key]
     public int ProjectId { get; set; }
+    public int UserId { get; set; }
 
     [StringLength(100)]
     public string? ProjectName { get; set; }
@@ -26,5 +27,5 @@ public partial class Project
     public bool? IsActive { get; set; }
 
     [InverseProperty("Project")]
-    public virtual ICollection<UserProjectAssociation> UserProjectAssociations { get; set; } = new List<UserProjectAssociation>();
+    public virtual ICollection<UserProjectRoleAssociation> UserProjectRoleAssociations { get; set; } = new List<UserProjectRoleAssociation>();
 }

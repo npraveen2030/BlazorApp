@@ -28,5 +28,5 @@ public partial class UserRole
     public int RolePriority { get; set; }
 
     [InverseProperty("Role")]
-    public virtual ICollection<UserRoleAssociation> UserRoleAssociations { get; set; } = new List<UserRoleAssociation>();
+    public virtual ICollection<UserProjectRoleAssociation> UserProjectRoleAssociations { get; set; } = new List<UserProjectRoleAssociation>();
 }

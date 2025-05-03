@@ -1,0 +1,249 @@
+﻿@rendermode InteractiveServer
+
+<!-- Modal to Add User -->
+<div class="modal fade" id="AddProjectModal" tabindex="-1" aria-labelledby="ProjectModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h1 class="modal-title fs-5" id="AddProjectModal">Project Details</h1>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<EditForm Model="@AddProjectForm" OnValidSubmit="AddProjectSubmitHandler">
+					<div >
+						<DataAnnotationsValidator />
+						<ValidationSummary />
+						<div class="d-flex flex-column align-items-start">
+							<label>ProjectName :</label>
+							<InputText @bind-Value="AddProjectForm.ProjectName" placeholder="Please Enter the Project Name" class="w-75 " />
+						</div>	
+					</div>
+					<div class="modal-footer">	
+						<button type="submit" class="btn btn-primary">Add Project</button>
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+					</div>
+				</EditForm>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Modal to conform delete -->
+<div class="modal fade" id="DeleteProjectConfirmationModal" tabindex="-1" aria-labelledby="deleteprojectModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h1 class="modal-title fs-5" id="DeleteProjectConfirmationModal">Confirm deletion</h1>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				@if (DeleteConfirmationProject is not null)
+				{
+					<p>@(DeleteConfirmationProject.ProjectName) will be removed</p>
+				}
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" @onclick="() =>HandleInActive(DeleteConfirmationProject)">Delete</button>
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="user-manager-container w-75 mx-auto">
+
+	<!-- Search Bar and filtering -->
+
+	<div class="d-flex flex-column">
+		<div class="d-flex mb-3 ">
+			<input type="text" class="form-control me-2 w-25 fs-custom" placeholder="Search by Projectname..." @bind="SearchText" />
+			<button class="btn btn-info fs-custom" @onclick="SearchProjects">Enter</button>
+		</div>
+
+		<div class="d-flex align-items-center gap-3 fs-custom ms-4">
+			<div class="form-check">
+				<input class="form-check-input" type="radio" name="exampleRadios" id="radio_pj_1" value="all" checked @onchange="OnFilterChanged">
+				<label class="form-check-label" for="radio_pj_1">
+					All Projects
+				</label>
+			</div>
+			<div class="form-check">
+				<input class="form-check-input" type="radio" name="exampleRadios" id="radio_pj_2" value="active" @onchange="OnFilterChanged">
+				<label class="form-check-label" for="radio_pj_2">
+					Active Projects
+				</label>
+			</div>
+			<div class="form-check">
+				<input class="form-check-input" type="radio" name="exampleRadios" id="radio_pj_3" value="inactive" @onchange="OnFilterChanged">
+				<label class="form-check-label" for="radio_pj_3">
+					Inactive Projects
+				</label>
+			</div>
+		</div>
+	</div>
+
+	<!-- Add Project -->
+
+	<div>
+		<button type="button" class="btn btn-dark rounded-0 fs-custom" data-bs-toggle="modal" data-bs-target="#AddProjectModal">
+			Add Project
+		</button>
+	</div>
+
+
+	<!-- Data Table -->
+	<div class="table-container mb-2">
+		<table class="table table-responsive table-striped table-bordered table-fs align-middle table-custom">
+			<thead>
+				<tr >
+					<th>ProjectId</th>
+					<th>ProjectName</th>
+					<th>
+						<div class="d-flex align-items-center">
+							@if (IsOrderonCreateDate)
+							{
+								@if (Ascorder)
+								{
+									<button class="button-reorder" @onclick="Reorder"><img src="images/ascending_order.png" class="img-fluid" /></button>
+								}
+								else
+								{
+									<button class="button-reorder" @onclick="Reorder"><img src="images/descending_order.png" class="img-fluid" /></button>
+								}
+							}
+						
+							<button @onclick="OrderCreatedDate" class="button-custom">CreatedDate</button>
+						</div>
+					</th>
+					<th>Creater Name</th>
+					<th >
+						<div class="d-flex align-items-center">
+							@if (IsOrderonModifyDate)
+							{
+								@if (Ascorder)
+								{
+									<button class="button-reorder" @onclick="Reorder"><img src="images/ascending_order.png" class="img-fluid" /></button>
+								}
+								else
+								{
+									<button class="button-reorder" @onclick="Reorder"><img src="images/descending_order.png" class="img-fluid" /></button>
+								}
+							}
+							<button @onclick="OrderModifyDate" class="button-custom">ModifiedDate</button>
+						</div>
+					</th>
+					<th>Modifier Name</th>
+					<th>Status</th>
+					<th>Edit</th>
+					<th>Change Status</th>
+				</tr>
+			</thead>
+
+			<tbody >
+				@if (Projects != null)
+				{
+					foreach (var project in Projects)
+					{
+						<tr>
+							<td >@project.ProjectId</td>
+							@if (project.IsEdit == false)
+							{
+								<td>@project.ProjectName</td>
+							}
+							else
+							{
+								<td ><input @bind-value="project.ProjectName" class="" /></td>
+							}
+							<td >@project.CreatedDate</td>
+							<td >@project.CreatedBy</td>
+							<td >@((project.ModifiedDate?.ToString() ?? "-"))</td>
+							<td >@((project.ModifiedBy?.ToString() ?? "-"))</td>
+							@if (project.IsEdit == false)
+							{
+								<td>@(project.IsActive ? "active" : "inactive")</td>
+							}
+							else
+							{
+								<td><InputCheckbox @bind-Value="project.IsActive" /></td>
+							}
+
+							@if (project.IsEdit == false)
+							{
+								<td>
+									<button type="button" class="btn btn-primary table-fs equal-width-btn" @onclick="() => HandleEdit(project)">
+										Edit
+									</button>
+								</td>
+
+								@if (project.IsActive)
+								{
+									<td>
+										<button type="button" class="btn btn-danger table-fs" data-bs-toggle="modal" data-bs-target="#DeleteProjectConfirmationModal" 
+										 @onclick="()=> DeleteConfirmationProject = project">
+											Delete
+										</button>
+									</td>
+								}
+								else
+								{
+									<td>
+										<button type="button" class="btn btn-danger table-fs" @onclick="() => HandleActive(project)">
+											Activate
+										</button>
+									</td>
+								}
+							}
+
+							else
+							{
+								<td>
+									<button type="button" class="btn btn-success table-fs equal-width-btn" @onclick="() => HandleSubmit(project)">Save</button>
+								</td>
+								<td>
+									<button type="button" class="btn btn-warning table-fs" @onclick="() => HandleCancel(project)">Cancel</button>
+								</td>
+							}
+						</tr>
+					}
+				}
+			</tbody>
+		</table>
+	</div>
+
+	<!-- Pagination -->
+	<div class="d-flex justify-content-end align-items-center align-content-center gap-4 ">
+		<nav >
+			<ul class="pagination m-0 ">
+				<li class="page-item @(pagination.IsPrevious ? "" : "disabled")">
+					<button class="page-link fs-custom" @onclick="pagination.PreviousPage">Previous</button>
+				</li>
+
+				@for (int i = 1; i <= pagination.TotalPages; i++)
+				{
+					int PageNumber = i;
+
+					<li class="page-item @(pagination.CurrentPage == PageNumber ? "active" : "")">
+						<button class="page-link fs-custom" @onclick="()=>pagination.ChangePage(PageNumber)">@PageNumber</button>
+					</li>
+				}
+
+				<li class="page-item @(pagination.IsNext ? "" : "disabled")">
+					<button class="page-link fs-custom" @onclick="pagination.NextPage">Next</button>
+				</li>
+			</ul>
+		</nav>
+
+		<div class="dropup-center dropup dropup-custom">
+			<button class="btn bg-white border border-dark-subtle dropdown-toggle fs-custom" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+				@pagination.PageSize
+			</button>
+			<ul class="dropdown-menu">
+				<li><button class="dropdown-item fs-custom" @onclick="()=>pagination.ChangePageSize(5)">5</button></li>
+				<li><button class="dropdown-item fs-custom" @onclick="()=>pagination.ChangePageSize(8)">8</button></li>
+				<li><button class="dropdown-item fs-custom" @onclick="()=>pagination.ChangePageSize(10)">10</button></li>
+			</ul>
+		</div>
+	</div>
+</div>
+

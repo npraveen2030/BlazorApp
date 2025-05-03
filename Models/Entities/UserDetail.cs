@@ -28,10 +28,6 @@ public partial class UserDetail
     [Column("isActive")]
     public bool IsActive { get; set; }
 
-
     [InverseProperty("User")]
-    public virtual ICollection<UserProjectAssociation> UserProjectAssociations { get; set; } = new List<UserProjectAssociation>();
-
-    [InverseProperty("User")]
-    public virtual ICollection<UserRoleAssociation> UserRoleAssociations { get; set; } = new List<UserRoleAssociation>();
+    public virtual ICollection<UserProjectRoleAssociation> UserProjectRoleAssociations { get; set; } = new List<UserProjectRoleAssociation>();
 }
