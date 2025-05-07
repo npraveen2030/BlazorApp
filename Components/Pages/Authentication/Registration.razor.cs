@@ -2,9 +2,9 @@
 using BlazorApp.Models.Dtos;
 using BlazorApp.Models.Entities;
 
-namespace BlazorApp.Components.Pages
+namespace BlazorApp.Components.Pages.Authentication
 {
-   public partial class Registration : ComponentBase
+    public partial class Registration : ComponentBase
     {
         // RegisterModel instance to hold the form data
         public UserDetailDto RegFormDetails { get; set; } = new();

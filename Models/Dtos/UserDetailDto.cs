@@ -20,7 +20,6 @@ namespace BlazorApp.Models.Dtos
 
         public string? ModifiedBy { get; set; }
 
-        // For Editing the user
         public bool IsEdit { get; set; } = false;
 
         public bool IsActive { get; set; } = true;

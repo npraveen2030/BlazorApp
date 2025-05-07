@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using BlazorApp.Models.Dtos;
 
-namespace BlazorApp.Components.Pages
+namespace BlazorApp.Components.Pages.Authentication
 {
     public partial class SignIn : ComponentBase
     {
@@ -19,15 +19,12 @@ namespace BlazorApp.Components.Pages
             await redirect.InvokeAsync("Register");
         }
 
-         //Method to handle form submission
+        //Method to handle form submission
         [Inject]
         private AuthDbContext Context { get; set; } = null!;
 
         [Inject]
         private NavigationManager Navigation { get; set; } = null!;
-
-        //[Inject]
-        //private UserSession Session { get; set; } = null!;
 
         internal async Task HandleSignin()
         {
@@ -40,7 +37,7 @@ namespace BlazorApp.Components.Pages
                 return;
             }
 
-            else if  (user.Password != SigninFormDetails.Password)
+            else if (user.Password != SigninFormDetails.Password)
             {
                 Console.WriteLine("Invalid password.");
                 return;
@@ -50,7 +47,7 @@ namespace BlazorApp.Components.Pages
             {
                 Navigation.NavigateTo("/manager");
             }
-                
+
         }
     }
 }

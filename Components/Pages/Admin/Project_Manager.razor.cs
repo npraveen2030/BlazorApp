@@ -4,7 +4,7 @@ using Microsoft.JSInterop;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 
-namespace BlazorApp.Components.Pages
+namespace BlazorApp.Components.Pages.Admin
 {
     public partial class Project_Manager : ComponentBase
     {
@@ -18,7 +18,7 @@ namespace BlazorApp.Components.Pages
         public Pagination pagination { get; set; } = null!;
 
         public string SearchText { get; set; } = null!;
-        public class Pagination(AuthDbContext Context , Func<int, int, Task> LoadProjects, Action ChangeIsOrderCD , Action ChangeIsOrderMD)
+        public class Pagination(AuthDbContext Context, Func<int, int, Task> LoadProjects, Action ChangeIsOrderCD, Action ChangeIsOrderMD)
         {
             public int CurrentPage { get; set; } = 1;
             public int PageSize { get; set; } = 10;
@@ -33,7 +33,7 @@ namespace BlazorApp.Components.Pages
                     IsPrevious = false;
                     IsNext = false;
                 }
-                else if (CurrentPage == 1 )
+                else if (CurrentPage == 1)
                 {
                     IsPrevious = false;
                     IsNext = true;
@@ -50,7 +50,7 @@ namespace BlazorApp.Components.Pages
                 }
             }
 
-            public async Task PageCount(string SearchText , string SelectedFilterValue)
+            public async Task PageCount(string SearchText, string SelectedFilterValue)
             {
                 var query = Context.Projects.AsQueryable();
 
@@ -99,7 +99,7 @@ namespace BlazorApp.Components.Pages
                         PageNavigators();
                         ChangeIsOrderCD();
                         ChangeIsOrderMD();
-                        await LoadProjects(CurrentPage , PageSize);
+                        await LoadProjects(CurrentPage, PageSize);
                     }
                 }
                 catch (Exception ex)
@@ -135,7 +135,7 @@ namespace BlazorApp.Components.Pages
             }
         }
 
-        internal async Task LoadProjects(int CurrentPage ,int PageSize)
+        internal async Task LoadProjects(int CurrentPage, int PageSize)
         {
             await pagination.PageCount(SearchText, SelectedFilterValue);
             pagination.PageNavigators();
@@ -181,16 +181,16 @@ namespace BlazorApp.Components.Pages
                     ModifiedDate = u.ModifiedDate,
                     IsActive = u.IsActive ?? false
                 })
-                .Skip((CurrentPage-1)*PageSize)
+                .Skip((CurrentPage - 1) * PageSize)
                 .Take(PageSize)
                 .ToListAsync();
 
-        } 
+        }
 
         protected override async Task OnInitializedAsync()
         {
-            pagination = new Pagination(Context,LoadProjects, ChangeIsOrderCD , ChangeIsOrderMD);
-            await LoadProjects(pagination.CurrentPage , pagination.PageSize);
+            pagination = new Pagination(Context, LoadProjects, ChangeIsOrderCD, ChangeIsOrderMD);
+            await LoadProjects(pagination.CurrentPage, pagination.PageSize);
         }
 
         // Searching
@@ -205,10 +205,10 @@ namespace BlazorApp.Components.Pages
         // Ordering
 
         public bool Ascorder { get; set; } = true;
-        
+
         public void Reorder()
         {
-            if(Ascorder)
+            if (Ascorder)
             {
                 Projects.Reverse();
                 Ascorder = false;
@@ -221,7 +221,7 @@ namespace BlazorApp.Components.Pages
         }
 
         // on created date
-        public bool IsOrderonCreateDate {  get; set; } = false;
+        public bool IsOrderonCreateDate { get; set; } = false;
         internal void OrderCreatedDate()
         {
             ChangeIsOrderMD();
@@ -236,7 +236,7 @@ namespace BlazorApp.Components.Pages
                 Projects = Projects.OrderBy(c => c.ProjectId).ToList();
                 IsOrderonCreateDate = false;
             }
-            
+
         }
 
         public void ChangeIsOrderCD()
@@ -303,7 +303,7 @@ namespace BlazorApp.Components.Pages
 
 
 
-                await LoadProjects(pagination.CurrentPage , pagination.PageSize);
+                await LoadProjects(pagination.CurrentPage, pagination.PageSize);
             }
             catch (Exception ex)
             {
@@ -343,7 +343,7 @@ namespace BlazorApp.Components.Pages
                 await Context.SaveChangesAsync();
             }
 
-            await LoadProjects(pagination.CurrentPage , pagination.PageSize);
+            await LoadProjects(pagination.CurrentPage, pagination.PageSize);
         }
 
         internal void HandleCancel(ProjectDto project)
@@ -354,7 +354,7 @@ namespace BlazorApp.Components.Pages
 
         // Toggling a user
 
-        public ProjectDto? DeleteConfirmationProject { get; set; } 
+        public ProjectDto? DeleteConfirmationProject { get; set; }
 
         internal async Task HandleInActive(ProjectDto project)
         {
