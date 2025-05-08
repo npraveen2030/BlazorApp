@@ -1,9 +1,9 @@
-.header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 10vh;
-    background-color: #D3D3D3;
+﻿.navbar-custom {
+    background-color: #0000CD;
+}
+
+.tabs-fs-custom {
+    font-size: 0.75rem;
 }
 
 .dashboard {
@@ -18,14 +18,13 @@
     column-gap: 20vw;
     row-gap: 6vh;
     margin-top: 10vh;
-
     --WIDTH: 8vw;
 }
 
 button {
     width: var(--WIDTH);
     height: var(--WIDTH);
-    background-color: transparent;
+    background-color: blue;
     border: none;
 }
 

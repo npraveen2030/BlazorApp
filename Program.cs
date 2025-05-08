@@ -1,4 +1,5 @@
 using BlazorApp.Components;
+using Radzen;
 
 namespace BlazorApp
 {
@@ -14,12 +15,16 @@ namespace BlazorApp
 
             builder.Services.AddDbContext<AuthDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-                
+
             builder.Services.AddServerSideBlazor()
-                .AddCircuitOptions(options => 
+                .AddCircuitOptions(options =>
                 {
                     options.DetailedErrors = true;
                 });
+
+            builder.Services.AddRadzenComponents();
+
+            builder.Services.AddScoped<UserSession>();
 
             var app = builder.Build();
 

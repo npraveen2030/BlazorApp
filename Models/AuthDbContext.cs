@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
 using BlazorApp.Models.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlazorApp.Models;
 
@@ -37,7 +37,7 @@ public partial class AuthDbContext : DbContext
 
         modelBuilder.Entity<UserDetail>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__UserDeta__1788CC4C8C363493");
+            entity.HasKey(e => e.UserId).HasName("PK__UserDeta__1788CC4C7AE0F18A");
         });
 
         modelBuilder.Entity<UserProjectRoleAssociation>(entity =>

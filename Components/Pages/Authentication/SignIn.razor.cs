@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using BlazorApp.Models.Dtos;
+using BlazorApp.Components.Pages.Features;
 
 namespace BlazorApp.Components.Pages.Authentication
 {
@@ -26,26 +27,37 @@ namespace BlazorApp.Components.Pages.Authentication
         [Inject]
         private NavigationManager Navigation { get; set; } = null!;
 
+        [Inject] private UserSession SessionDetails { get; set; } = null!;
+
         internal async Task HandleSignin()
         {
             var user = await Context.UserDetails
                         .FirstOrDefaultAsync(u => u.UserName == SigninFormDetails.UserName);
 
-            if (user == null)
+            if (user != null)
             {
-                Console.WriteLine("User not found.");
-                return;
+                if (!PasswordHelper.VerifyPassword(SigninFormDetails.Password, user.Password))
+                {
+                    Console.WriteLine("Invalid User or Password");
+                    return;
+                }
+                else
+                {
+                    SessionDetails.UserId = user.UserId;
+                    SessionDetails.RoleId = await Context.UserProjectRoleAssociations
+                                                           .Where(assoc => assoc.UserId == user.UserId && assoc.IsActive)
+                                                           .Include(assoc => assoc.Role)
+                                                           .OrderByDescending(assoc => assoc.Role.RolePriority) 
+                                                           .Select(assoc => (int?)assoc.RoleId)
+                                                           .FirstOrDefaultAsync() ?? 0;
+                    SessionDetails.IsAuthenticated = true;
+                    Navigation.NavigateTo("/associatedprojects");
+                }
             }
-
-            else if (user.Password != SigninFormDetails.Password)
-            {
-                Console.WriteLine("Invalid password.");
-                return;
-            }
-
             else
             {
-                Navigation.NavigateTo("/manager");
+                Console.WriteLine("Invalid User or Password");
+                return;
             }
 
         }

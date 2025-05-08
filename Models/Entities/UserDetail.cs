@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BlazorApp.Models.Entities;
 
+[Index("UserName", Name = "IX_UserDetails", IsUnique = true)]
 public partial class UserDetail
 {
     [Key]
@@ -14,7 +15,7 @@ public partial class UserDetail
     [StringLength(50)]
     public string UserName { get; set; } = null!;
 
-    [StringLength(50)]
+    [StringLength(256)]
     public string Password { get; set; } = null!;
 
     public DateOnly? CreatedDate { get; set; }

@@ -1,0 +1,13 @@
+﻿@page "/associatedprojects"
+@rendermode InteractiveServer
+
+<div class="navbar-custom bg-primary">
+    <h1 class="text-center text-white py-2">Associated Projects</h1>
+</div>
+
+<div class="dashboard_container">
+    @foreach (var project in AssociatedProjects)
+    {
+        <button @onclick="() => HandleProjectSelect(project.ProjectId)">@project.ProjectName</button>
+    }
+</div>

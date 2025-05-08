@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using BlazorApp.Models.Dtos;
 using BlazorApp.Models.Entities;
+using BlazorApp.Components.Pages.Features;
 
 namespace BlazorApp.Components.Pages.Authentication
 {
@@ -30,7 +31,7 @@ namespace BlazorApp.Components.Pages.Authentication
                 var newUser = new UserDetail
                 {
                     UserName = RegFormDetails.UserName,
-                    Password = RegFormDetails.Password,
+                    Password = PasswordHelper.HashPassword(RegFormDetails.Password),
                     CreatedDate = DateOnly.FromDateTime(DateTime.Now),
                     IsActive = true
                 };
