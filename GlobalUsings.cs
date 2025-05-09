@@ -8,3 +8,6 @@ global using Microsoft.EntityFrameworkCore;
 
 global using BlazorApp.Models;
 global using BlazorApp.Session;
+
+global using Radzen;
+global using Radzen.Blazor;

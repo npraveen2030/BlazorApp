@@ -47,7 +47,7 @@ namespace BlazorApp.Components.Pages.Authentication
                     SessionDetails.RoleId = await Context.UserProjectRoleAssociations
                                                            .Where(assoc => assoc.UserId == user.UserId && assoc.IsActive)
                                                            .Include(assoc => assoc.Role)
-                                                           .OrderByDescending(assoc => assoc.Role.RolePriority) 
+                                                           .OrderByDescending(assoc => assoc.Role.RolePriority)
                                                            .Select(assoc => (int?)assoc.RoleId)
                                                            .FirstOrDefaultAsync() ?? 0;
                     SessionDetails.IsAuthenticated = true;

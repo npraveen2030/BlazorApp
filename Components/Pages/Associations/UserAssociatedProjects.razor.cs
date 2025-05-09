@@ -27,7 +27,7 @@ namespace BlazorApp.Components.Pages.Associations
 
         public void HandleProjectSelect(int id)
         {
-            NavManager.NavigateTo($"/projectpage/{id}");
+            NavManager.NavigateTo($"/project/{id}");
         }
     }
 }
