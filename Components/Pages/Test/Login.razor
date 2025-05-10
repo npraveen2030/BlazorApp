@@ -1,0 +1,22 @@
+@page "/Login"
+@rendermode InteractiveServer
+@inject NavigationManager Navigation
+@inject BLazorApp.Services.UserSessionService SessionService
+
+<h3>Login</h3>
+
+<input @bind="username" placeholder="Enter username" class="form-control" />
+<button class="btn btn-primary mt-2" @onclick="LoginUser">Login</button>
+
+@code {
+    private string username = string.Empty;
+
+    private void LoginUser()
+    {
+        if (!string.IsNullOrWhiteSpace(username))
+        {
+            SessionService.Login(username);
+            Navigation.NavigateTo("/secure");
+        }
+    }
+}

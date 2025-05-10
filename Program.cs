@@ -1,4 +1,5 @@
 using BlazorApp.Components;
+using BLazorApp.Services;
 using Radzen;
 
 namespace BlazorApp
@@ -26,6 +27,7 @@ namespace BlazorApp
 
             builder.Services.AddScoped<UserSession>();
             builder.Services.AddScoped<DialogService>();
+            builder.Services.AddScoped<UserSessionService>();
 
 
             var app = builder.Build();
