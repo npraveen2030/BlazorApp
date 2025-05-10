@@ -10,42 +10,57 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-				<form @onsubmit="AddUpraSubmitHandler">
-					<label for="User">Select a User:</label>
-					<select id="User" @bind="UserId_bind">
-						<option value="0">-- Select --</option>
-						@if (activeUsers is not null)
-						{
-							@foreach (var user in activeUsers)
-							{
-								<option value="@user.UserId">@user.UserName</option>
-							}
-						}
-						else
-						{
-							<option value="">No Users Found</option>
-						}
+				<form @onsubmit="AddUpraSubmitHandler" class="p-3">
+					<!-- User Selection -->
+					<div class="row mb-3 align-items-center gap-3">
+						<div class="col-auto">
+							<label for="User" class="col-form-label">Select a User:</label>
+						</div>
+						<div class="col-auto">
+							<select id="User" @bind="UserId_bind" class="form-select" style="width: 250px; height: 40px;">
+								<option value="0">-- Select --</option>
+								@if (activeUsers is not null)
+								{
+									@foreach (var user in activeUsers)
+									{
+										<option value="@user.UserId">@user.UserName</option>
+									}
+								}
+								else
+								{
+									<option value="">No Users Found</option>
+								}
+							</select>
+						</div>
+					</div>
 
-					</select>
-
-					<label for="User">Select a Project:</label>
-					<select id="Project" @bind="Upraform.ProjectId">
-						<option value="0">-- Select --</option>
-						@if (inactiveProjects is not null)
-						{
-							@foreach (var project in inactiveProjects)
-							{
-								<option value="@project.ProjectId">@project.ProjectName</option>
-							}
-						}
-						else
-						{
-							<option value="">Select User</option>
-						}
-
-					</select>
-
-					<button type="submit">Submit</button>
+					<!-- Project Selection -->
+					<div class="row mb-3 align-items-center">
+						<div class="col-auto">
+							<label for="Project" class="col-form-label">Select a Project:</label>
+						</div>
+						<div class="col-auto">
+							<select id="Project" @bind="Upraform.ProjectId" class="form-select" style="width: 250px; height: 40px;">
+								<option value="0">-- Select --</option>
+								@if (inactiveProjects is not null)
+								{
+									@foreach (var project in inactiveProjects)
+									{
+										<option value="@project.ProjectId">@project.ProjectName</option>
+									}
+								}
+								else
+								{
+									<option value="">Select User</option>
+								}
+							</select>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-primary">Submit</button>
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+					</div>
+					
 				</form>
 			</div>
 		</div>
@@ -197,14 +212,6 @@
 									<button type="button" class="btn btn-danger table-fs" data-bs-toggle="modal"
 										data-bs-target="#DeleteConfirmationModal" @onclick="() => DeleteConfirmationupra = upra">
 										Delete
-									</button>
-								</td>
-							}
-							else
-							{
-								<td>
-									<button type="button" class="btn btn-danger table-fs" @onclick="() => HandleActive(upra)">
-										Activate
 									</button>
 								</td>
 							}

@@ -3,6 +3,7 @@ using BlazorApp.Models.Dtos;
 using Microsoft.JSInterop;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
+using BlazorApp.Components.Pages.Features;
 
 namespace BlazorApp.Components.Pages.Admin
 {
@@ -169,7 +170,7 @@ namespace BlazorApp.Components.Pages.Admin
                 {
                     UserId = u.UserId,
                     UserName = u.UserName,
-                    Password = u.Password,
+                    Password = "XXXXXXXXX",
                     CreatedBy = Context.UserDetails
                                 .Where(c => c.UserId == u.CreatedBy)
                                 .Select(c => c.UserName)
@@ -290,7 +291,7 @@ namespace BlazorApp.Components.Pages.Admin
                 var newUser = new UserDetail
                 {
                     UserName = AdminAddUserForm.UserName,
-                    Password = AdminAddUserForm.Password,
+                    Password = PasswordHelper.HashPassword(AdminAddUserForm.Password),
                     CreatedDate = DateOnly.FromDateTime(DateTime.Now),
                     CreatedBy = 1,
                     IsActive = true

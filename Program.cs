@@ -25,6 +25,8 @@ namespace BlazorApp
             builder.Services.AddRadzenComponents();
 
             builder.Services.AddScoped<UserSession>();
+            builder.Services.AddScoped<DialogService>();
+
 
             var app = builder.Build();
 

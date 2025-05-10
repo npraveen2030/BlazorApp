@@ -345,7 +345,8 @@ namespace BlazorApp.Components.Pages.Admin
                                           .ToListAsync();
 
             UserAssociatedProjects = await Context.UserProjectRoleAssociations
-                                                  .Where(a => a.UserId == value && a.IsActive)
+                                                  .Where(a => a.RoleId == 11
+                                                           && a.IsActive)
                                                   .Select(a => a.ProjectId)
                                                   .ToListAsync();
 
@@ -397,20 +398,6 @@ namespace BlazorApp.Components.Pages.Admin
             }
 
             await JS.InvokeVoidAsync("bootstrapInterop.hideModal", "#DeleteConfirmationModal");
-            await LoadUPRAs(pagination.CurrentPage, pagination.PageSize);
-        }
-
-        internal async Task HandleActive(UserProjectRoleAssociationDto upra)
-        {
-
-            var toggled_user = Context.UserProjectRoleAssociations.FirstOrDefault(u => u.UpraId == upra.UpraId);
-
-            if (toggled_user != null)
-            {
-                toggled_user.IsActive = true;
-                await Context.SaveChangesAsync();
-            }
-
             await LoadUPRAs(pagination.CurrentPage, pagination.PageSize);
         }
 

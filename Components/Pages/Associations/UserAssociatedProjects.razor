@@ -3,6 +3,14 @@
 
 <div class="navbar-custom bg-primary">
     <h1 class="text-center text-white py-2">Associated Projects</h1>
+    @if (SessionDetails.RoleId == 11)
+    {
+        <NavLink class="btn btn-primary position-absolute end-0 top-0" href="/projectmanagerportal">PM Portal</NavLink>
+    }
+    @if (SessionDetails.RoleId == 12)
+    {
+        <NavLink class="btn btn-primary position-absolute end-0 top-0" href="/projectleadportal">PL Portal</NavLink>
+    }
 </div>
 
 <div class="dashboard_container">
