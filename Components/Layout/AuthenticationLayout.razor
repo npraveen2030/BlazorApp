@@ -1,0 +1,30 @@
+﻿@inherits LayoutComponentBase
+
+<div class="main position-relative">
+
+    <span class="position-absolute end-0"><ThemeToggler /></span>
+    
+<div class="mx-auto bg-light p-5 rounded-5 authentication-container">
+    <div class="d-flex flex-column align-items-center gap-4">
+        <ul class="nav ">
+            <li class="nav-item">
+                <a class="nav-link @(activeTab == "signin" ? "disabled" : "")" href="/signin">signin</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link @(activeTab == "register" ? "disabled" : "")" href="/register" tabindex="-1">register</a>
+            </li>
+        </ul>
+        <figure style="width:100px;height:100px">
+            <img src="images/user.png" alt="user pic" class="img-fluid" />
+        </figure>
+    </div>
+
+    <div class="mt-5">
+        @Body
+    </div>
+
+</div>
+</div>
+
+
+

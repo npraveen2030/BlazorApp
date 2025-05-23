@@ -1,6 +1,6 @@
 using BlazorApp.Components;
-using BLazorApp.Services;
-using Radzen;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Server;
 
 namespace BlazorApp
 {
@@ -10,7 +10,6 @@ namespace BlazorApp
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 
@@ -23,27 +22,53 @@ namespace BlazorApp
                     options.DetailedErrors = true;
                 });
 
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                            .AddCookie(options =>
+                            {
+                                options.LoginPath = "/";
+                                options.AccessDeniedPath = "/forbidden";
+                                options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+                                options.SlidingExpiration = true;
+                                options.Cookie.Name = "AuthCookie";
+                            });
+
+            builder.Services.AddAuthorization();
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddCascadingAuthenticationState();
+            builder.Services.AddScoped<AuthenticationStateProvider, ServerAuthenticationStateProvider>();
+            builder.Services.AddSingleton<EmailService>();
+
+            builder.Services.AddHttpClient("Default", client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:7139"); // Replace with your app's base URL
+            });
+
+            builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("Default"));
+
             builder.Services.AddRadzenComponents();
-
-            builder.Services.AddScoped<UserSession>();
-            builder.Services.AddScoped<DialogService>();
-            builder.Services.AddScoped<UserSessionService>();
-
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment())
-            {
-                app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
-
-            app.UseHttpsRedirection();
-
             app.UseStaticFiles();
+
+            app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseAntiforgery();
+
+            app.MapPost("/logout", async (HttpContext context) =>
+            {
+                await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                return Results.Redirect("/");
+            });
+
+            app.MapGet("/", context =>
+            {
+                context.Response.Redirect("/signin");
+                return Task.CompletedTask;
+            });
 
             app.MapRazorComponents<App>()
                 .AddInteractiveServerRenderMode();

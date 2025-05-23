@@ -29,6 +29,10 @@ public partial class UserDetail
     [Column("isActive")]
     public bool IsActive { get; set; }
 
+    public string? ResetToken { get; set; }
+
+    public DateTime? ResetTokenExpiration { get; set; }
+
     [InverseProperty("User")]
     public virtual ICollection<UserProjectRoleAssociation> UserProjectRoleAssociations { get; set; } = new List<UserProjectRoleAssociation>();
 }

@@ -1,21 +1,25 @@
 ﻿@page "/associatedprojects"
-@rendermode InteractiveServer
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
 
-<div class="navbar-custom bg-primary">
-    <h1 class="text-center text-white py-2">Associated Projects</h1>
-    @if (SessionDetails.RoleId == 11)
-    {
-        <NavLink class="btn btn-primary position-absolute end-0 top-0" href="/projectmanagerportal">PM Portal</NavLink>
-    }
-    @if (SessionDetails.RoleId == 12)
-    {
-        <NavLink class="btn btn-primary position-absolute end-0 top-0" href="/projectleadportal">PL Portal</NavLink>
-    }
-</div>
+<AuthorizeView>
+    <Authorized>
+        @if (AssociatedProjects is not null)
+        {
+            <NavBar Title="Associated Projects" UserName="@SessionDetails.UserName" UserRoles="@SessionDetails.UserRoles" />
 
-<div class="dashboard_container">
-    @foreach (var project in AssociatedProjects)
-    {
-        <button @onclick="() => HandleProjectSelect(project.ProjectId)">@project.ProjectName</button>
-    }
-</div>
+            <div class="dashboard_container">
+                @foreach (var project in AssociatedProjects)
+                {
+                    <button @onclick="() => HandleProjectSelect(project.ProjectId)">@project.ProjectName</button>
+                }
+            </div>
+        }
+        else
+        {
+            <h1>Loading ...</h1>
+        }
+    </Authorized>
+    <NotAuthorized>
+        <NotAuthorizedPage />
+    </NotAuthorized>
+</AuthorizeView>

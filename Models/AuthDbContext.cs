@@ -16,13 +16,21 @@ public partial class AuthDbContext : DbContext
     {
     }
 
+    public virtual DbSet<MasterTabAssocaition> MasterTabAssocaitions { get; set; }
+
+    public virtual DbSet<PreferencesMasterTable> PreferencesMasterTables { get; set; }
+
     public virtual DbSet<Project> Projects { get; set; }
 
     public virtual DbSet<UserDetail> UserDetails { get; set; }
 
+    public virtual DbSet<UserGridAssoc> UserGridAssocs { get; set; }
+
     public virtual DbSet<UserProjectRoleAssociation> UserProjectRoleAssociations { get; set; }
 
     public virtual DbSet<UserRole> UserRoles { get; set; }
+
+    public virtual DbSet<UserTabAssoc> UserTabAssocs { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
@@ -30,6 +38,16 @@ public partial class AuthDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<MasterTabAssocaition>(entity =>
+        {
+            entity.Property(e => e.TabName).IsFixedLength();
+        });
+
+        modelBuilder.Entity<PreferencesMasterTable>(entity =>
+        {
+            entity.Property(e => e.GroupName).IsFixedLength();
+        });
+
         modelBuilder.Entity<Project>(entity =>
         {
             entity.HasKey(e => e.ProjectId).HasName("PK__Tiles__7FCB7AE063243E74");

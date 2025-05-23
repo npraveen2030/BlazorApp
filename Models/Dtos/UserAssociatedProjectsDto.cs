@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BlazorApp.Models.Dtos
 {
@@ -6,26 +7,32 @@ namespace BlazorApp.Models.Dtos
     {
         public int UpraId { get; set; }
 
+        [Required(ErrorMessage = "User selection is required.")]
+        [Range(1, int.MaxValue)]
         public int UserId { get; set; }
 
+        [Required(ErrorMessage = "Role selection is required.")]
+        [Range(1, int.MaxValue)]
         public int RoleId { get; set; }
 
+        [Required(ErrorMessage = "Project selection is required.")]
+        [Range(1, int.MaxValue)]
         public int ProjectId { get; set; }
 
-        public string UserName { get; set; } = null!;
+        public string UserName { get; set; } = "";
 
-        public string RoleName { get; set; } = null!;
+        public string RoleName { get; set; } = "";
 
-        public string ProjectName { get; set; } = null!;
+        public string ProjectName { get; set; } = "";
 
-        public DateTime? CreatedDate { get; set; }
+        public DateOnly? CreatedDate { get; set; }
 
         public string? CreatedBy { get; set; }
 
-        public DateTime? ModifiedDate { get; set; }
+        public DateOnly? ModifiedDate { get; set; }
 
         public string? ModifiedBy { get; set; }
 
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
     }
 }

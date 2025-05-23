@@ -19,13 +19,11 @@ public partial class UserProjectRoleAssociation
 
     public int ProjectId { get; set; }
 
-    [Column(TypeName = "datetime")]
-    public DateTime? CreatedDate { get; set; }
+    public DateOnly? CreatedDate { get; set; }
 
     public int? CreatedBy { get; set; }
 
-    [Column(TypeName = "datetime")]
-    public DateTime? ModifiedDate { get; set; }
+    public DateOnly? ModifiedDate { get; set; }
 
     public int? ModifiedBy { get; set; }
 

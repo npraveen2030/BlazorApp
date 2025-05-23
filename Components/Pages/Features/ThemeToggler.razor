@@ -1,0 +1,14 @@
+﻿@rendermode @(new InteractiveServerRenderMode(prerender: false))
+
+<div class="container">
+    <button class=" theme-toggler-btn" @onclick="ToggleTheme">
+        @if (isDarkTheme)
+        {
+            <img src="images/dark_mode.png" class="img-fluid" />
+        }
+        else
+        {
+            <img src="images/light_mode.png" class="img-fluid" />
+        }
+    </button>
+</div>

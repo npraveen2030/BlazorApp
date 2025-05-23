@@ -1,65 +1,69 @@
-﻿using Microsoft.AspNetCore.Components;
-using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore;
-using BlazorApp.Models.Dtos;
-using BlazorApp.Components.Pages.Features;
+﻿using Microsoft.AspNetCore.Components.Forms;
 
 namespace BlazorApp.Components.Pages.Authentication
 {
     public partial class SignIn : ComponentBase
     {
-        // SignInModel instance to hold the form data
-        public UserDetailDto SigninFormDetails = new();
+        [Inject] private NavigationManager Navigation { get; set; } = null!;
+        [Inject] private AuthDbContext Context { get; set; } = null!;
+        [Inject] private IHttpContextAccessor HttpContextAccessor { get;set; } = null!;
+        [SupplyParameterFromForm] public UserDetailDto SigninForm { get;set;} = new();
 
-        // Redirecting to Register page
-        [Parameter]
-        public EventCallback<string> redirect { get; set; }
+        private EditContext _editContext { get;set;} = null!;
+        private ValidationMessageStore _messageStore { get; set; } = null!;
 
-        public async Task redirectfunction()
+        protected override void OnInitialized()
         {
-            await redirect.InvokeAsync("Register");
+            _editContext = new EditContext(SigninForm);
+            _messageStore = new ValidationMessageStore(_editContext);
         }
-
-        //Method to handle form submission
-        [Inject]
-        private AuthDbContext Context { get; set; } = null!;
-
-        [Inject]
-        private NavigationManager Navigation { get; set; } = null!;
-
-        [Inject] private UserSession SessionDetails { get; set; } = null!;
 
         internal async Task HandleSignin()
         {
-            var user = await Context.UserDetails
-                        .FirstOrDefaultAsync(u => u.UserName == SigninFormDetails.UserName);
+            _messageStore.Clear();
 
-            if (user != null)
+            var user = await Context.UserDetails.FirstOrDefaultAsync(u => u.UserName == SigninForm.UserName);
+
+            if (user == null || !PasswordHelper.VerifyPassword(SigninForm.Password, user.Password))
             {
-                if (!PasswordHelper.VerifyPassword(SigninFormDetails.Password, user.Password))
-                {
-                    Console.WriteLine("Invalid User or Password");
-                    return;
-                }
-                else
-                {
-                    SessionDetails.UserId = user.UserId;
-                    SessionDetails.RoleId = await Context.UserProjectRoleAssociations
-                                                           .Where(assoc => assoc.UserId == user.UserId && assoc.IsActive)
-                                                           .Include(assoc => assoc.Role)
-                                                           .OrderBy(assoc => assoc.Role.RolePriority)
-                                                           .Select(assoc => (int?)assoc.RoleId)
-                                                           .FirstOrDefaultAsync() ?? 0;
-                    SessionDetails.IsAuthenticated = true;
-                    Navigation.NavigateTo("/associatedprojects");
-                }
+                _messageStore.Add(() => SigninForm.Password, "Invalid Username or Password");
+                _editContext.NotifyValidationStateChanged();
+                return;
             }
             else
             {
-                Console.WriteLine("Invalid User or Password");
-                return;
-            }
+                var UserAssociatedRoles = await Context.UserProjectRoleAssociations
+                                          .Where(assoc => assoc.UserId == user.UserId && assoc.IsActive)
+                                          .Include(assoc => assoc.Role)
+                                          .OrderBy(assoc => assoc.Role.RolePriority)
+                                          .Select(assoc => assoc.RoleId)
+                                          .Distinct()
+                                          .ToListAsync();
 
+                var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.Name,user.UserId.ToString())
+                    };
+
+                foreach (var role in UserAssociatedRoles)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, role.ToString()));
+                }
+
+                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                if (HttpContextAccessor.HttpContext != null)
+                {
+                    await HttpContextAccessor.HttpContext.SignInAsync(
+                        CookieAuthenticationDefaults.AuthenticationScheme,
+                        new ClaimsPrincipal(identity),
+                        new AuthenticationProperties { IsPersistent = false }
+                    );
+                }
+
+                SigninForm = new();
+                Navigation.NavigateTo("/associatedprojects", forceLoad: true);
+            }
         }
     }
 }

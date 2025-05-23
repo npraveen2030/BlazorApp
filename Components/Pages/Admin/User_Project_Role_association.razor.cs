@@ -1,10 +1,3 @@
-using BlazorApp.Models.Entities;
-using BlazorApp.Models.Dtos;
-using Microsoft.JSInterop;
-using Microsoft.AspNetCore.Components;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
-
 namespace BlazorApp.Components.Pages.Admin
 {
     public partial class User_Project_Role_Association : ComponentBase
@@ -301,7 +294,7 @@ namespace BlazorApp.Components.Pages.Admin
         internal async Task HandleAddUPRAClick()
         {
             activeUsers = await Context.UserDetails
-                                          .Where(u => u.IsActive)
+                                          .Where(u => u.IsActive && u.UserId != 1)
                                           .Select(u => new ActiveUsers
                                           {
                                               UserId = u.UserId,
@@ -363,7 +356,7 @@ namespace BlazorApp.Components.Pages.Admin
                     UserId = Upraform.UserId,
                     RoleId = 11,
                     ProjectId = Upraform.ProjectId,
-                    CreatedDate = DateTime.Now,
+                    CreatedDate = DateOnly.FromDateTime(DateTime.Now),
                     CreatedBy = 1,
                     IsActive = true
                 };

@@ -32,3 +32,8 @@ button {
         width: var(--WIDTH);
         height: var(--WIDTH);
     }
+
+.icon-custom {
+    width : 2rem;
+    height: 2rem;
+}

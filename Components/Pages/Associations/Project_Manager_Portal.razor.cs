@@ -1,32 +1,36 @@
-﻿using BlazorApp.Models.Dtos;
-using BlazorApp.Models.Entities;
-using Microsoft.AspNetCore.Components.Rendering;
-using Microsoft.JSInterop;
-using Radzen.Blazor.Rendering;
-
-namespace BlazorApp.Components.Pages.Associations
+﻿namespace BlazorApp.Components.Pages.Associations
 {
     public partial class Project_Manager_Portal : ComponentBase
     {
-        [Inject] internal AuthDbContext Context { get; set; } = null!;
-        [Inject] internal UserSession SessionDetails { get; set; } = null!;
-        [Inject] internal IJSRuntime JS { get; set; } = null!;
-        [Inject] internal NavigationManager NavManager { get;set; } = null!;
+        [Inject] private AuthDbContext Context { get; set; } = null!;
+        [Inject] private IJSRuntime JS { get; set; } = null!;
+        [Inject] private NavigationManager NavManager { get;set; } = null!;
+        [Inject] private AuthenticationStateProvider AuthenticationStateProvider { get; set; } = null!;
 
         private List<UserAssociatedProjectsDto> Associations { get; set;} = null!;
         private List<UserAssociatedProjectsDto> ActiveUsers { get; set; } = null!;
         private List<UserAssociatedProjectsDto> AvailableProjects { get; set; } = null!;
         private UserAssociatedProjectsDto AddAssociationForm { get; set; } = new();
+        internal UserSession SessionDetails { get; set; } = new();
 
         protected override async Task OnInitializedAsync()
         {
-            //await Task.Delay(4000);
-            //Console.WriteLine("Test1 : " + SessionDetails.UserId);
-            //if (SessionDetails.UserId == 0)
-            //{
-            //    Console.WriteLine("Test2 : " + SessionDetails.UserId);
-            //    NavManager.NavigateTo("/");
-            //}
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            if (user.Identity != null && user.Identity.IsAuthenticated)
+            {
+                SessionDetails.UserId = Convert.ToInt32(user.Identity.Name);
+                SessionDetails.UserName = await Context.UserDetails
+                                                 .Where(u => u.UserId == SessionDetails.UserId)
+                                                 .Select(u => u.UserName)
+                                                 .FirstOrDefaultAsync() ?? "";
+                SessionDetails.UserRoles = user.Claims
+                                                .Where(c => c.Type == ClaimTypes.Role)
+                                                .Select(c => c.Value)
+                                                .ToList();
+
+            }
 
             await FetchAssociations();
         }
@@ -110,7 +114,7 @@ namespace BlazorApp.Components.Pages.Associations
         {
             AvailableProjects = await Context.UserProjectRoleAssociations
                                              .Where(assoc => assoc.UserId == SessionDetails.UserId
-                                                          && assoc.RoleId == SessionDetails.RoleId
+                                                          && assoc.RoleId == Convert.ToInt32(SessionDetails.UserRoles[0])
                                                           && assoc.IsActive)
                                              .Include(assoc => assoc.Project)
                                              .Select(assoc => new UserAssociatedProjectsDto
@@ -139,7 +143,7 @@ namespace BlazorApp.Components.Pages.Associations
                     UserId = AddAssociationForm.UserId,
                     RoleId = 12,
                     ProjectId = AddAssociationForm.ProjectId,
-                    CreatedDate = DateTime.Now,
+                    CreatedDate = DateOnly.FromDateTime(DateTime.Now),
                     CreatedBy = SessionDetails.UserId,
                     IsActive = true
                 };

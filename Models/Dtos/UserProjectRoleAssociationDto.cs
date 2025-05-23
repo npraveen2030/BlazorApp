@@ -31,11 +31,11 @@ namespace BlazorApp.Models.Dtos
 
         public string ProjectName { get; set; } = null!;
 
-        public DateTime? CreatedDate { get; set; }
+        public DateOnly? CreatedDate { get; set; }
 
         public string CreatedBy { get; set; } = null!;
 
-        public DateTime? ModifiedDate { get; set; }
+        public DateOnly? ModifiedDate { get; set; }
 
         public string ModifiedBy { get; set; } = null!;
 

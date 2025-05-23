@@ -1,25 +1,23 @@
-﻿<!-- Sign in -->
-@rendermode InteractiveServer
+﻿@page "/signin"
+@layout Layout.AuthenticationLayout
 @using System.ComponentModel.DataAnnotations
 
-<EditForm Model="@SigninFormDetails" OnValidSubmit="HandleSignin">
+<EditForm EditContext="_editContext" OnValidSubmit="HandleSignin" FormName="signin">
     <DataAnnotationsValidator />
-    <ValidationSummary />
     <div class="input_container">
         <div class="input_wraper">
-            <InputText @bind-Value="SigninFormDetails.UserName" placeholder="Username" />
-        </div>
-        
-        <div class="input_wraper">
-            <InputText @bind-Value="SigninFormDetails.Password" InputType="password" placeholder="Password" />
+            <InputText @bind-Value="SigninForm.UserName" placeholder="Username" />
+            <ValidationMessage For="@(() => SigninForm.UserName)" />
         </div>
 
-        @* <div class="checkbox"> *@
-        @*     <InputCheckbox @bind-Value="signInInstance.RememberMe" /> *@
-        @*     <label>Remember Me</label> *@
-        @* </div> *@
+        <div class="input_wraper">
+            <InputText @bind-Value="SigninForm.Password" InputType="password" placeholder="Password" />
+            <ValidationMessage For="@(() => SigninForm.Password)" />
+        </div>
+
+        <a href="/forgotpassword">Forgot Password?</a>
         
         <button type="submit" class="submit_button">Sign in</button>
-        <button class="redirect_button" @onclick="redirectfunction" >Register</button>
+        <a class="redirect_button" href="/register" >Register</a>
     </div>
 </EditForm>

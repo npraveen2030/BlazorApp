@@ -1,55 +1,64 @@
 ﻿@page "/admin"
-@rendermode InteractiveServer
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
 
 <PageTitle>Admin Portal</PageTitle>
 
-<div class="admin_portal_container bg-light min-vh-100">
-    <div class="navbar-custom">
-        <h1 class="text-center text-white py-2">Admin Portal</h1>
-    </div>
+<AuthorizeView Roles="1" Context="authContext">
+    <Authorized>
+        <div class="admin_portal_container bg-light min-vh-100">
+            <NavBar Title="Admin Portal" />
 
-    <div class="container mt-1">
-        <!-- Nav tabs -->
-        <ul class="nav nav-tabs mb-1 tabs-fs-custom">
-            <li class="nav-item">
-                <button type="button" class="nav-link @(activeTab == 1 ? "active" : "")" @onclick="() => activeTab = 1">
-                    User Manager
-                </button>
-            </li>
-            <li class="nav-item">
-                <button type="button" class="nav-link @(activeTab == 2 ? "active" : "")" @onclick="() => activeTab = 2">
-                    Project_Manager
-                </button>
-            </li>
-            <li class="nav-item">
-                <button type="button" class="nav-link @(activeTab == 3 ? "active" : "")" @onclick="() => activeTab = 3">
-                    User Role Associations
-                </button>
-            </li>
-        </ul>
+            <div class="container mt-1 position-relative">
 
-        <!-- Tab content -->
-        <div class="tab-content mt-2">
-            <CascadingValue Value="activeTab">
-                @if (activeTab == 1)
-                {
-                    <div class="tab-pane fade show active">
-                        <User_Manager />
-                    </div>
-                }
-                else if (activeTab == 2)
-                {
-                    <div class="tab-pane fade show active">
-                        <Project_Manager />
-                    </div>
-                }
-                else if (activeTab == 3)
-                {
-                    <div class="tab-pane fade show active">
-                        <User_Project_Role_Association />
-                    </div>
-                }
-            </CascadingValue>
+                <button class="btn btn-primary position-absolute end-0"
+                  @onclick="SavePreferenceHandler">save preferences</button>
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs mb-1 tabs-fs-custom">
+                    <li class="nav-item">
+                        <button type="button" class="nav-link @(ActiveTab == 1 ? "active" : "")" @onclick="() => ActiveTab = 1">
+                            User Manager
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" class="nav-link @(ActiveTab == 2 ? "active" : "")" @onclick="() => ActiveTab = 2">
+                            Project_Manager
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" class="nav-link @(ActiveTab == 3 ? "active" : "")" @onclick="() => ActiveTab = 3">
+                            User Role Associations
+                        </button>
+                    </li>
+                </ul>
+
+                <!-- Tab content -->
+                <div class="tab-content mt-2">
+                    <CascadingValue Value="ActiveTab">
+                        @if (ActiveTab == 1)
+                        {
+                            <div class="tab-pane fade show active">
+                                <User_Manager />
+                            </div>
+                        }
+                        else if (ActiveTab == 2)
+                        {
+                            <div class="tab-pane fade show active">
+                                <Project_Manager />
+                            </div>
+                        }
+                        else if (ActiveTab == 3)
+                        {
+                            <div class="tab-pane fade show active">
+                                <User_Project_Role_Association />
+                            </div>
+                        }
+                    </CascadingValue>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
+
+    </Authorized>
+    <NotAuthorized>
+        <NotAuthorizedPage />
+    </NotAuthorized>
+</AuthorizeView>

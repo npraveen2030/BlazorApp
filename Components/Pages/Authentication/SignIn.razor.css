@@ -39,3 +39,13 @@
     background-color: transparent;
     border: none;
 }
+
+
+.error {
+    padding-left: 5vw !important;
+    color: red !important;
+    font-size: 0.85rem !important;
+    margin-top: 4px !important;
+    display: block !important;
+}
+
