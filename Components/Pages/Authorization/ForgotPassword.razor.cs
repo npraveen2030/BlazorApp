@@ -7,10 +7,9 @@ namespace BlazorApp.Components.Pages.Authorization
         [Inject] private AuthDbContext Context { get; set; } = null!;
         [Inject] private NavigationManager NavManager { get; set; } = null!;
         [Inject] private EmailService EmailService { get; set; } = null!;
+        [Inject] internal IJSRuntime JS { get; set; } = null!;
 
         private EmailModel emailModel = new();
-
-        private bool IsSent { get;set;} = false;
 
         private async Task HandleForgotPassword()
         {
@@ -26,7 +25,7 @@ namespace BlazorApp.Components.Pages.Authorization
 
                 await EmailService.SendAsync(emailModel.Email, "Password Reset", $"Click to reset: {resetLink}");
 
-                IsSent = true;
+                await JS.InvokeVoidAsync("bootstrapInterop.showToast", "sentemailtoast");
             }
         }
     }
