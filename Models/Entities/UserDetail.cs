@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace BlazorApp.Models.Entities;
 
 [Index("UserName", Name = "IX_UserDetails", IsUnique = true)]
+[Table("UserDetails")]
 public partial class UserDetail
 {
     [Key]
