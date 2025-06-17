@@ -1,0 +1,112 @@
+﻿@page "/projectmanagerportal"
+@using Microsoft.AspNetCore.Components.Rendering
+@using BlazorApp.Model.CustomModels.Core
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+
+<AuthorizeView Roles="11" Context="authContext">
+    <Authorized>
+        @if (Associations is not null)
+        {
+        <!-- Modal to Add Association -->
+        <div class="modal fade" id="AddAssociationModal" tabindex="-1" aria-labelledby="AssociationModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="AddAssociationModal">Assoiation Details</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <EditForm Model="@AddAssociationForm" OnValidSubmit="AddAssociationSubmitHandler" class="p-3">
+                            <!-- User Selection -->
+                            <div class="row mb-3 align-items-center gap-3">
+                                <div class="col-auto">
+                                    <label for="User" class="col-form-label">Select a User:</label>
+                                </div>
+                                <div class="col-auto">
+                                    <select id="User" @bind="UserId_BindValue" class="form-select" style="width: 250px; height: 40px;">
+                                        <option value="0">-- Select --</option>
+                                        @if (ActiveUsers is not null)
+                                        {
+                                            @foreach (var user in ActiveUsers)
+                                            {
+                                                <option value="@user.UserId">@user.UserName</option>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <option value="">No Users Found</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Project Selection -->
+                            <div class="row mb-3 align-items-center">
+                                <div class="col-auto">
+                                    <label for="Project" class="col-form-label">Select a Project:</label>
+                                </div>
+                                <div class="col-auto">
+                                    <select id="Project" @bind="AddAssociationForm.ProjectId" class="form-select" style="width: 250px; height: 40px;">
+                                        <option value="0">-- Select --</option>
+                                        @if (AvailableProjects is not null)
+                                        {
+                                            @foreach (var project in AvailableProjects)
+                                            {
+                                                <option value="@project.ProjectId">@project.ProjectName</option>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <option value="">Select User</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Buttons -->
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Add Association</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </EditForm>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <NavBar Title="Project Manager Portal" UserName="@SessionDetails.UserName"/>
+
+            <RadzenDataGrid Data="@Associations" TItem="UserProjectRoleAssociationDto">
+            <HeaderTemplate>
+                <RadzenButton Text="Add Association" Click="HandleAddAssociation" Icon="add_circle" />
+            </HeaderTemplate>
+            <Columns>
+                <RadzenDataGridColumn TItem="UserProjectRoleAssociationDto" Property="UserName" Title="UserName" />
+                <RadzenDataGridColumn TItem="UserProjectRoleAssociationDto" Property="ProjectName" Title="ProjectName" />
+                <RadzenDataGridColumn TItem="UserProjectRoleAssociationDto" Property="RoleId" Title="RoleId" />
+                <RadzenDataGridColumn TItem="UserProjectRoleAssociationDto" Property="CreatedDate" Title="CreatedDate" />
+                <RadzenDataGridColumn TItem="UserProjectRoleAssociationDto" Property="CreatedBy" Title="CreatedBy" />
+                <RadzenDataGridColumn TItem="UserProjectRoleAssociationDto" Property="ModifiedDate" Title="ModifiedDate" />
+                <RadzenDataGridColumn TItem="UserProjectRoleAssociationDto" Property="ModifiedBy" Title="ModifiedBy" />
+                <RadzenDataGridColumn TItem="UserProjectRoleAssociationDto" Property="IsActive" Title="IsActive" />
+                <RadzenDataGridColumn TItem="UserProjectRoleAssociationDto" Title="Actions">
+                    <Template Context="association">
+                        @if (association.IsActive)
+                        {
+                            <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Size="ButtonSize.Small"
+                                          Click="@(() => DeleteAssociation(association))" />
+                        }
+                    </Template>
+                </RadzenDataGridColumn>
+	        </Columns>
+         </RadzenDataGrid>
+        }
+        else
+        {
+            <h1>Loading ....</h1>
+        }
+    </Authorized>
+    <NotAuthorized>
+        <NotAuthorizedPage />
+    </NotAuthorized>
+</AuthorizeView>

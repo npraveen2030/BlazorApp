@@ -1,0 +1,225 @@
+﻿@if (Projects is not null)
+{
+	<!-- Modal to Add User -->
+	<div class="modal fade" id="AddProjectModal" tabindex="-1" aria-labelledby="ProjectModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="AddProjectModal">Project Details</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<EditForm Model="@AddProjectForm" OnValidSubmit="AddProjectSubmitHandler" class="p-3">
+						<DataAnnotationsValidator />
+						<!-- Project Name Input -->
+						<div class="row mb-3 align-items-center">
+							<div class="col-auto">
+								<label for="ProjectName" class="col-form-label">Project Name:</label>
+							</div>
+							<div class="col-auto">
+								<InputText id="ProjectName"
+										   @bind-Value="AddProjectForm.ProjectName"
+										   class="form-control"
+										   placeholder="Please enter the project name"
+										   style="width: 250px; height: 40px;" />
+								<ValidationMessage For="@(() => AddProjectForm.ProjectName)" />
+							</div>
+						</div>
+
+						<!-- Buttons -->
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-primary">Add Project</button>
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+						</div>
+					</EditForm>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal to conform delete -->
+	<div class="modal fade" id="DeleteProjectConfirmationModal" tabindex="-1" aria-labelledby="deleteprojectModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="DeleteProjectConfirmationModal">Confirm deletion</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					@if (DeleteConfirmationProject is not null)
+					{
+						<p>@(DeleteConfirmationProject.ProjectName) will be removed</p>
+					}
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" @onclick="() =>HandleInActive(DeleteConfirmationProject)">Delete</button>
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="user-manager-container mx-auto">
+		<RadzenDataGrid Data="@Projects"
+		TItem="ProjectDto"
+		Style="height:500px ; width:100% ; margin: auto ; margin-top:10vh;"
+		AllowPaging="true"
+		PagerPosition=PagerPosition.Bottom
+		PagerHorizontalAlign=HorizontalAlign.Right
+		PageSizeOptions="@pageSizeOptions"
+		GridLines="Radzen.DataGridGridLines.Both"
+		AllowColumnResize="true"
+		ColumnResized=@gridPreferencesSaver.OnColumnResized
+		AllowColumnReorder="true"
+		ColumnReordered=@gridPreferencesSaver.OnColumnReordered
+		AllowColumnPicking="true"
+		PickedColumnsChanged="@gridPreferencesSaver.PickedColumnsChanged">
+			<HeaderTemplate>
+				<div class="d-flex align-items-center">
+					<button type="button" class="btn btn-dark rounded-0 fs-custom" data-bs-toggle="modal" data-bs-target="#AddProjectModal">
+						Add Project
+					</button>
+				</div>
+			</HeaderTemplate>
+			<Columns>
+				<RadzenDataGridColumn TItem="ProjectDto"
+				Property="ProjectId"
+				Title="ProjectId"
+				Width="@GridState["ProjectId"].Width"
+				OrderIndex="@GridState["ProjectId"].OrderIndex"
+				Visible="@GridState["ProjectId"].Visible" />
+
+				<RadzenDataGridColumn TItem="ProjectDto"
+				Property="ProjectName"
+				Title="ProjectName"
+				Width="@GridState["ProjectName"].Width"
+				OrderIndex="@GridState["ProjectName"].OrderIndex"
+				Visible="@GridState["ProjectName"].Visible">
+					<Template Context="data">
+						@if (data.IsEdit == true)
+						{
+							<InputText @bind-Value="data.ProjectName" />
+						}
+						else
+						{
+							<span>@data.ProjectName</span>
+						}
+					</Template>
+				</RadzenDataGridColumn>
+
+				<RadzenDataGridColumn TItem="ProjectDto"
+				Property="CreatedBy"
+				Title="CreatedBy"
+				Width="@GridState["CreatedBy"].Width"
+				OrderIndex="@GridState["CreatedBy"].OrderIndex"
+				Visible="@GridState["CreatedBy"].Visible" />
+
+				<RadzenDataGridColumn TItem="ProjectDto"
+				Property="CreatedDate"
+				Title="CreatedDate"
+				Width="@GridState["CreatedDate"].Width"
+				OrderIndex="@GridState["CreatedDate"].OrderIndex"
+				Visible="@GridState["CreatedDate"].Visible" />
+
+				<RadzenDataGridColumn TItem="ProjectDto"
+				Property="ModifiedBy"
+				Title="ModifiedBy"
+				Width="@GridState["ModifiedBy"].Width"
+				OrderIndex="@GridState["ModifiedBy"].OrderIndex"
+				Visible="@GridState["ModifiedBy"].Visible" />
+
+				<RadzenDataGridColumn TItem="ProjectDto"
+				Property="ModifiedDate"
+				Title="ModifiedDate"
+				Width="@GridState["ModifiedDate"].Width"
+				OrderIndex="@GridState["ModifiedDate"].OrderIndex"
+				Visible="@GridState["ModifiedDate"].Visible" />
+
+				<RadzenDataGridColumn TItem="ProjectDto"
+				Property="IsActive"
+				Title="IsActive"
+				Width="@GridState["IsActive"].Width"
+				OrderIndex="@GridState["IsActive"].OrderIndex"
+				Visible="@GridState["IsActive"].Visible">
+					<Template Context="data">
+						@if (data.IsEdit == true)
+						{
+							<InputCheckbox @bind-Value="data.IsActive" />
+						}
+						else
+						{
+							<span>@(data.IsActive ? "active" : "inactive")</span>
+						}
+					</Template>
+				</RadzenDataGridColumn>
+
+				<RadzenDataGridColumn TItem="ProjectDto"
+				Title="Edit"
+				Frozen="true"
+				FrozenPosition="FrozenColumnPosition.Right"
+				TextAlign="TextAlign.Center"
+				Reorderable="false"
+				Resizable="false"
+				Width="100px">
+					<Template Context="data">
+						@if (data.IsEdit == false)
+						{
+							<RadzenButton Icon="edit"
+							ButtonStyle="ButtonStyle.Primary"
+							Size="ButtonSize.Small"
+							Click="@(() => HandleEdit(data))" />
+						}
+						else
+						{
+							<RadzenButton Icon="save"
+							ButtonStyle="ButtonStyle.Success"
+							Size="ButtonSize.Small"
+							Click="@(() => HandleSubmit(data))" />
+						}
+					</Template>
+				</RadzenDataGridColumn>
+
+				<RadzenDataGridColumn TItem="ProjectDto"
+				Title="Change Status"
+				Frozen="true"
+				FrozenPosition="FrozenColumnPosition.Right"
+				TextAlign="TextAlign.Center"
+				Reorderable="false"
+				Resizable="false"
+				Width="100px">
+					<Template Context="data">
+						@if (data.IsEdit == false)
+						{
+							@if (data.IsActive)
+							{
+								<button type="button" class="btn btn-danger table-fs" data-bs-toggle="modal"
+								data-bs-target="#DeleteConfirmationModal" @onclick="() => DeleteConfirmationProject = data">
+									Delete
+								</button>
+
+							}
+							else
+							{
+								<button type="button" class="btn btn-danger table-fs" @onclick="() => HandleActive(data)">
+									Activate
+								</button>
+							}
+						}
+						else
+						{
+							<RadzenButton Icon="close"
+							ButtonStyle="ButtonStyle.Danger"
+							Size="ButtonSize.Small"
+							Click="@(() => HandleCancel(data))" />
+						}
+					</Template>
+				</RadzenDataGridColumn>
+			</Columns>
+		</RadzenDataGrid>
+	</div>
+}
+else
+{
+	<h1>Loading...</h1>
+}

@@ -1,0 +1,75 @@
+﻿@page "/pricingdetails"
+@using Microsoft.AspNetCore.Components.Rendering
+@rendermode InteractiveServer
+
+<AuthorizeView Context="authContext">
+    <Authorized>
+        @if (Tabs != null && ActiveTab != 0)
+        {
+            <NavBar Title="Pricing" />
+            <div class="bg-light min-vh-100">
+                <div class="container mt-1 position-relative">
+
+                    <button class="btn btn-primary position-absolute end-0"
+                    @onclick="SavePreferenceHandler">save preferences</button>
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs mb-1 tabs-fs-custom">
+                        @if(ActiveTab == 1)
+                        {
+                            <li class="nav-item">
+                                <button type="button"
+                                class="nav-link @(ActiveTab == Tabs[0].TabId ? "active" : "")"
+                                @onclick="() => ActiveTab = Tabs[0].TabId">
+                                    @Tabs[0].TabName
+                                </button>
+                            </li>
+                        }
+                        else
+                        {
+                            @foreach (var tab in Tabs)
+                            {
+                                <li class="nav-item">
+                                    <button type="button"
+                                            class="nav-link @(ActiveTab == tab.TabId ? "active" : "")"
+                                            @onclick="() => ActiveTab = tab.TabId">
+                                        @tab.TabName
+                                    </button>
+                                </li>
+                            }
+                        }
+                    </ul>
+
+                    <!-- Tab content -->
+                    <div class="tab-content mt-2">
+                        @if (ActiveTab == 1)
+                        {
+                            <div class="tab-pane fade show active">
+                                <Models HandleNameClick="ShowExceptionInterest" />
+                            </div>
+                        }
+                        else if (ActiveTab == 2)
+                        {
+                            <div class="tab-pane fade show active">
+                                
+                            </div>
+                        }
+                        else if (ActiveTab == 3)
+                        {
+                            <div class="tab-pane fade show active">
+                                <Exception_Interest ModelId="@SelectedEIId" ModelName="@SelectedEIName" />
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <h1>Loading ....</h1>
+        }
+
+    </Authorized>
+    <NotAuthorized>
+        <NotAuthorizedPage />
+    </NotAuthorized>
+</AuthorizeView>

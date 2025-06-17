@@ -1,0 +1,93 @@
+﻿@using Microsoft.AspNetCore.Components.Rendering
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+@using BlazorApp.Model.CustomModels.Pricing
+
+<AuthorizeView Context="authContext">
+    <Authorized>
+        @if (PricingModels is not null)
+        {
+            <RadzenDataGrid Data="@PricingModels"
+            TItem="ModelDto"
+            Style="height:400px ; width:80% ; margin: auto ; margin-top:10vh;"
+            AllowPaging="true"
+            PagerPosition=PagerPosition.Bottom
+            PagerHorizontalAlign=HorizontalAlign.Right
+            PageSizeOptions="@pageSizeOptions"
+            GridLines="Radzen.DataGridGridLines.Both"
+            AllowColumnResize="true"
+            ColumnResized=@gridPreferencesSaver.OnColumnResized
+            AllowColumnReorder="true"
+            ColumnReordered=@gridPreferencesSaver.OnColumnReordered
+            AllowColumnPicking="true"
+            PickedColumnsChanged="@gridPreferencesSaver.PickedColumnsChanged">
+                <HeaderTemplate>
+                    <div class="d-flex align-items-center">
+                        <button class="btn btn-primary" @onclick="SavePreferencesHandler">
+                            save preferences
+                        </button>
+                    </div>
+                </HeaderTemplate>
+                <Columns>
+                    <RadzenDataGridColumn TItem="ModelDto"
+                    Property="Modelid"
+                    Title="Modelid"
+                    Width="@GridState["Modelid"].Width"
+                    OrderIndex="@GridState["Modelid"].OrderIndex"
+                    Visible="@GridState["Modelid"].Visible" />
+
+                    <RadzenDataGridColumn TItem="ModelDto"
+                    Title="Name">
+                        <Template Context="model">
+                            <button class="btn-sty-none" @onclick="() => SelectModel(model)">
+                                @model.Name
+                            </button>
+                        </Template>
+                    </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="ModelDto"
+                                              Property="CreatedDate"
+                                              Title="CreatedDate"
+                                              Width="@GridState["CreatedDate"].Width"
+                                              OrderIndex="@GridState["CreatedDate"].OrderIndex"
+                                              Visible="@GridState["CreatedDate"].Visible" />
+                    
+                    <RadzenDataGridColumn TItem="ModelDto"
+                                          Property="CreatedBy"
+                                          Title="CreatedBy"
+                                          Width="@GridState["CreatedBy"].Width"
+                                          OrderIndex="@GridState["CreatedBy"].OrderIndex"
+                                          Visible="@GridState["CreatedBy"].Visible" />
+
+                    <RadzenDataGridColumn TItem="ModelDto"
+                                          Property="ModifiedDate"
+                                          Title="ModifiedDate"
+                                          Width="@GridState["ModifiedDate"].Width"
+                                          OrderIndex="@GridState["ModifiedDate"].OrderIndex"
+                                          Visible="@GridState["ModifiedDate"].Visible" />
+
+                    <RadzenDataGridColumn TItem="ModelDto"
+                                          Property="ModifiedBy"
+                                          Title="ModifiedBy"
+                                          Width="@GridState["ModifiedBy"].Width"
+                                          OrderIndex="@GridState["ModifiedBy"].OrderIndex"
+                                          Visible="@GridState["ModifiedBy"].Visible" />
+
+                    <RadzenDataGridColumn TItem="ModelDto"
+                                          Property="IsActive"
+                                          Title="IsActive"
+                                          Width="@GridState["IsActive"].Width"
+                                          OrderIndex="@GridState["IsActive"].OrderIndex"
+                                          Visible="@GridState["IsActive"].Visible" />
+
+                </Columns>
+            </RadzenDataGrid>
+        }
+        else
+        {
+            <h1>Loading ....</h1>
+        }
+
+    </Authorized>
+    <NotAuthorized>
+        <NotAuthorizedPage />
+    </NotAuthorized>
+</AuthorizeView>

@@ -1,0 +1,27 @@
+﻿@using System.ComponentModel.DataAnnotations
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+
+<EditForm Model="@RegFormDetails" OnValidSubmit="HandleRegister" formname="redistrationform">
+    <DataAnnotationsValidator />
+
+    <div class="input_container">
+        <div class="input_wraper">
+            <InputText @bind-Value="RegFormDetails.UserName" placeholder="Username" />
+            <ValidationMessage For="@(() => RegFormDetails.UserName)" />
+        </div>
+
+        <div class="input_wraper">
+            <InputText @bind-Value="RegFormDetails.Password" InputType="password" placeholder="Password" />
+            <ValidationMessage For="@(() => RegFormDetails.Password)" />
+        </div>
+
+        <div class="input_wraper">  
+          <InputText @bind-Value="RegFormDetails.ConfirmPassword" InputType="password" placeholder="Confirm Password" />
+            <ValidationMessage For="@(() => RegFormDetails.ConfirmPassword)" />
+        </div> 
+
+        <button type="submit" class="submit_button">Register</button>
+        <button class="redirect_button" @onclick="ChangeTabtoSignIn">Sign in</button>
+    </div>
+
+</EditForm>

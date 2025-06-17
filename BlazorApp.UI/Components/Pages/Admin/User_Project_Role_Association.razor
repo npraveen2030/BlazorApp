@@ -1,0 +1,208 @@
+@using Microsoft.AspNetCore.Components.Forms
+
+@if (UPRAs is not null)
+{
+	<!-- Modal to Add User -->
+	<div class="modal fade" id="AddUpraModal" tabindex="-1" aria-labelledby="UPRAModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="AddUpraModal">UPRA Details</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<form @onsubmit="AddUpraSubmitHandler" class="p-3">
+						<!-- User Selection -->
+						<div class="row mb-3 align-items-center gap-3">
+							<div class="col-auto">
+								<label for="User" class="col-form-label">Select a User:</label>
+							</div>
+							<div class="col-auto">
+								<select id="User" @bind="UserId_bind" class="form-select" style="width: 250px; height: 40px;">
+									<option value="0">-- Select --</option>
+									@if (activeUsers is not null)
+									{
+										@foreach (var user in activeUsers)
+										{
+											<option value="@user.UserId">@user.UserName</option>
+										}
+									}
+									else
+									{
+										<option value="">No Users Found</option>
+									}
+								</select>
+							</div>
+						</div>
+
+						<!-- Project Selection -->
+						<div class="row mb-3 align-items-center">
+							<div class="col-auto">
+								<label for="Project" class="col-form-label">Select a Project:</label>
+							</div>
+							<div class="col-auto">
+								<select id="Project" @bind="Upraform.ProjectId" class="form-select" style="width: 250px; height: 40px;">
+									<option value="0">-- Select --</option>
+									@if (inactiveProjects is not null)
+									{
+										@foreach (var project in inactiveProjects)
+										{
+											<option value="@project.ProjectId">@project.ProjectName</option>
+										}
+									}
+									else
+									{
+										<option value="">Select User</option>
+									}
+								</select>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-primary">Submit</button>
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+						</div>
+
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Modal to conform delete -->
+	<div class="modal fade" id="DeleteConfirmationModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+	aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="DeleteConfirmationModal">Confirm deletion</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					@if (DeleteConfirmationupra is not null)
+					{
+						<p>@(DeleteConfirmationupra.UserName)'s Association with the Project
+							@(DeleteConfirmationupra.ProjectName)
+							will be removed</p>
+					}
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary"
+					@onclick="() => HandleInActive(DeleteConfirmationupra)">Delete</button>
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="user-manager-container mx-auto">
+
+		<RadzenDataGrid Data="@UPRAs"
+		TItem="UserProjectRoleAssociationDto"
+		Style="height:500px ; width:100% ; margin: auto ; margin-top:10vh;"
+		AllowPaging="true"
+		PagerPosition=PagerPosition.Bottom
+		PagerHorizontalAlign=HorizontalAlign.Right
+		PageSizeOptions="@pageSizeOptions"
+		GridLines="Radzen.DataGridGridLines.Both"
+		AllowColumnResize="true"
+		ColumnResized=@gridPreferencesSaver.OnColumnResized
+		AllowColumnReorder="true"
+		ColumnReordered=@gridPreferencesSaver.OnColumnReordered
+		AllowColumnPicking="true"
+		PickedColumnsChanged="@gridPreferencesSaver.PickedColumnsChanged">
+			<HeaderTemplate>
+				<div class="d-flex align-items-center">
+					<button type="button" class="btn btn-dark rounded-0 fs-custom" @onclick="HandleAddUPRAClick">
+						Add UPRA
+					</button>
+				</div>
+			</HeaderTemplate>
+			<Columns>
+				<RadzenDataGridColumn TItem="UserProjectRoleAssociationDto"
+				Property="UserName"
+				Title="UserName"
+				Width="@GridState["UserName"].Width"
+				OrderIndex="@GridState["UserName"].OrderIndex"
+				Visible="@GridState["UserName"].Visible" />
+
+				<RadzenDataGridColumn TItem="UserProjectRoleAssociationDto"
+				Property="RoleName"
+				Title="RoleName"
+				Width="@GridState["RoleName"].Width"
+				OrderIndex="@GridState["RoleName"].OrderIndex"
+				Visible="@GridState["RoleName"].Visible" />
+
+				<RadzenDataGridColumn TItem="UserProjectRoleAssociationDto"
+				Property="ProjectName"
+				Title="ProjectName"
+				Width="@GridState["ProjectName"].Width"
+				OrderIndex="@GridState["ProjectName"].OrderIndex"
+				Visible="@GridState["ProjectName"].Visible" />
+
+				<RadzenDataGridColumn TItem="UserProjectRoleAssociationDto"
+				Property="CreatedBy"
+				Title="CreatedBy"
+				Width="@GridState["CreatedBy"].Width"
+				OrderIndex="@GridState["CreatedBy"].OrderIndex"
+				Visible="@GridState["CreatedBy"].Visible" />
+
+				<RadzenDataGridColumn TItem="UserProjectRoleAssociationDto"
+				Property="CreatedDate"
+				Title="CreatedDate"
+				Width="@GridState["CreatedDate"].Width"
+				OrderIndex="@GridState["CreatedDate"].OrderIndex"
+				Visible="@GridState["CreatedDate"].Visible" />
+
+				<RadzenDataGridColumn TItem="UserProjectRoleAssociationDto"
+				Property="ModifiedBy"
+				Title="ModifiedBy"
+				Width="@GridState["ModifiedBy"].Width"
+				OrderIndex="@GridState["ModifiedBy"].OrderIndex"
+				Visible="@GridState["ModifiedBy"].Visible" />
+
+				<RadzenDataGridColumn TItem="UserProjectRoleAssociationDto"
+				Property="ModifiedDate"
+				Title="ModifiedDate"
+				Width="@GridState["ModifiedDate"].Width"
+				OrderIndex="@GridState["ModifiedDate"].OrderIndex"
+				Visible="@GridState["ModifiedDate"].Visible" />
+
+				<RadzenDataGridColumn TItem="UserProjectRoleAssociationDto"
+				Property="IsActive"
+				Title="IsActive"
+				Width="@GridState["IsActive"].Width"
+				OrderIndex="@GridState["IsActive"].OrderIndex"
+				Visible="@GridState["IsActive"].Visible">
+					<Template Context="data">
+						<span>@(data.IsActive ? "active" : "inactive")</span>
+					</Template>
+				</RadzenDataGridColumn>
+
+				<RadzenDataGridColumn TItem="UserProjectRoleAssociationDto"
+				Title="Change Status"
+				Frozen="true"
+				FrozenPosition="FrozenColumnPosition.Right"
+				TextAlign="TextAlign.Center"
+				Reorderable="false"
+				Resizable="false"
+				Width="100px">
+					<Template Context="data">
+						@if (data.IsActive)
+						{
+							<button type="button" class="btn btn-danger table-fs" data-bs-toggle="modal" 
+							data-bs-target="#DeleteConfirmationModal" @onclick="() => DeleteConfirmationupra = data"> 
+								Delete 
+							</button> 
+						}
+					</Template>
+				</RadzenDataGridColumn>
+			</Columns>
+		</RadzenDataGrid>
+	</div>
+}
+else
+{
+	<h1>Loading...</h1>
+}

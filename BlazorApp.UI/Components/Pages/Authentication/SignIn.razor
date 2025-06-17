@@ -1,0 +1,25 @@
+﻿@using System.ComponentModel.DataAnnotations
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+
+<EditForm EditContext="_editContext" OnValidSubmit="HandleSignin" FormName="signin">
+    <DataAnnotationsValidator />
+    <div class="input_container">
+        <div class="input_wraper">
+            <InputText @bind-Value="SigninForm.UserName" placeholder="Username" />
+            <ValidationMessage For="@(() => SigninForm.UserName)" />
+        </div>
+
+        <div class="input_wraper">
+            <InputText @bind-Value="SigninForm.Password" InputType="password" placeholder="Password" />
+            <ValidationMessage For="@(() => SigninForm.Password)" />
+        </div>
+
+        <div class="input_wraper">
+            <a href="/forgotpassword">Forgot Password?</a>
+        </div>
+        
+        
+        <button type="submit" class="submit_button">Sign in</button>
+        <button class="redirect_button" @onclick="ChangeTabtoRegister" >Register</button>
+    </div>
+</EditForm>

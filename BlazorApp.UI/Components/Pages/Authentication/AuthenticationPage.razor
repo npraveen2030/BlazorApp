@@ -1,0 +1,39 @@
+﻿@page "/"
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+
+<div class="main">
+    <div class="auth_container">
+        <div class="top">
+            <ul class="tabs">
+                <li class="@(activeTab == "Register" ? "bg_w" : "")">
+                    <button @onclick='() => SetActiveTab("SignIn")'
+                            class="@(activeTab == "SignIn" ? "active" : "inactive_right")">
+                        Sign in
+                    </button>
+                </li>
+                <li class="@(activeTab == "SignIn" ? "bg_w" : "")">
+                    <button @onclick='() => SetActiveTab("Register")'
+                            class="@(activeTab == "Register" ? "active" : "inactive_left")">
+                        Register
+                    </button>
+                </li>
+            </ul>
+            <figure>
+                <img src="images/user.png" alt="user pic" class="user_img" />
+            </figure>
+        </div>
+
+        <div class="bottom">
+            @if (activeTab == "SignIn")
+            {
+                <SignIn ChangeTab="SetActiveTab" />
+            }
+            else if (activeTab == "Register")
+            {
+                <Registration ChangeTab="SetActiveTab" />
+            }
+        </div>
+
+    </div>
+</div>
+
