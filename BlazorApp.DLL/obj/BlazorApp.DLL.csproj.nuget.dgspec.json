@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Projects\\BlazorApp-UnitTest and 3tier\\BlazorApp\\BlazorApp.DLL\\BlazorApp.DLL.csproj": {}
+    "D:\\BlazorApp\\BlazorApp.DLL\\BlazorApp.DLL.csproj": {}
   },
   "projects": {
-    "D:\\Projects\\BlazorApp-UnitTest and 3tier\\BlazorApp\\BlazorApp.DLL\\BlazorApp.DLL.csproj": {
+    "D:\\BlazorApp\\BlazorApp.DLL\\BlazorApp.DLL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Projects\\BlazorApp-UnitTest and 3tier\\BlazorApp\\BlazorApp.DLL\\BlazorApp.DLL.csproj",
+        "projectUniqueName": "D:\\BlazorApp\\BlazorApp.DLL\\BlazorApp.DLL.csproj",
         "projectName": "BlazorApp.DLL",
-        "projectPath": "D:\\Projects\\BlazorApp-UnitTest and 3tier\\BlazorApp\\BlazorApp.DLL\\BlazorApp.DLL.csproj",
+        "projectPath": "D:\\BlazorApp\\BlazorApp.DLL\\BlazorApp.DLL.csproj",
         "packagesPath": "C:\\Users\\Mohammad Sameer\\.nuget\\packages\\",
-        "outputPath": "D:\\Projects\\BlazorApp-UnitTest and 3tier\\BlazorApp\\BlazorApp.DLL\\obj\\",
+        "outputPath": "D:\\BlazorApp\\BlazorApp.DLL\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -32,8 +32,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\Projects\\BlazorApp-UnitTest and 3tier\\BlazorApp\\BlazorApp.Model\\BlazorApp.Model.csproj": {
-                "projectPath": "D:\\Projects\\BlazorApp-UnitTest and 3tier\\BlazorApp\\BlazorApp.Model\\BlazorApp.Model.csproj"
+              "D:\\BlazorApp\\BlazorApp.Model\\BlazorApp.Model.csproj": {
+                "projectPath": "D:\\BlazorApp\\BlazorApp.Model\\BlazorApp.Model.csproj"
               }
             }
           }
@@ -85,14 +85,14 @@
         }
       }
     },
-    "D:\\Projects\\BlazorApp-UnitTest and 3tier\\BlazorApp\\BlazorApp.Model\\BlazorApp.Model.csproj": {
+    "D:\\BlazorApp\\BlazorApp.Model\\BlazorApp.Model.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Projects\\BlazorApp-UnitTest and 3tier\\BlazorApp\\BlazorApp.Model\\BlazorApp.Model.csproj",
+        "projectUniqueName": "D:\\BlazorApp\\BlazorApp.Model\\BlazorApp.Model.csproj",
         "projectName": "BlazorApp.Model",
-        "projectPath": "D:\\Projects\\BlazorApp-UnitTest and 3tier\\BlazorApp\\BlazorApp.Model\\BlazorApp.Model.csproj",
+        "projectPath": "D:\\BlazorApp\\BlazorApp.Model\\BlazorApp.Model.csproj",
         "packagesPath": "C:\\Users\\Mohammad Sameer\\.nuget\\packages\\",
-        "outputPath": "D:\\Projects\\BlazorApp-UnitTest and 3tier\\BlazorApp\\BlazorApp.Model\\obj\\",
+        "outputPath": "D:\\BlazorApp\\BlazorApp.Model\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

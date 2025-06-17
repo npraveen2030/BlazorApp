@@ -5777,11 +5777,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Projects\\BlazorApp-UnitTest and 3tier\\BlazorApp\\BlazorApp.Test\\BlazorApp.Test.csproj",
+      "projectUniqueName": "D:\\BlazorApp\\BlazorApp.Test\\BlazorApp.Test.csproj",
       "projectName": "BlazorApp.Test",
-      "projectPath": "D:\\Projects\\BlazorApp-UnitTest and 3tier\\BlazorApp\\BlazorApp.Test\\BlazorApp.Test.csproj",
+      "projectPath": "D:\\BlazorApp\\BlazorApp.Test\\BlazorApp.Test.csproj",
       "packagesPath": "C:\\Users\\Mohammad Sameer\\.nuget\\packages\\",
-      "outputPath": "D:\\Projects\\BlazorApp-UnitTest and 3tier\\BlazorApp\\BlazorApp.Test\\obj\\",
+      "outputPath": "D:\\BlazorApp\\BlazorApp.Test\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -5802,17 +5802,17 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "D:\\Projects\\BlazorApp-UnitTest and 3tier\\BlazorApp\\BlazorApp.BLL\\BlazorApp.BLL.csproj": {
-              "projectPath": "D:\\Projects\\BlazorApp-UnitTest and 3tier\\BlazorApp\\BlazorApp.BLL\\BlazorApp.BLL.csproj"
+            "D:\\BlazorApp\\BlazorApp.BLL\\BlazorApp.BLL.csproj": {
+              "projectPath": "D:\\BlazorApp\\BlazorApp.BLL\\BlazorApp.BLL.csproj"
             },
-            "D:\\Projects\\BlazorApp-UnitTest and 3tier\\BlazorApp\\BlazorApp.DLL\\BlazorApp.DLL.csproj": {
-              "projectPath": "D:\\Projects\\BlazorApp-UnitTest and 3tier\\BlazorApp\\BlazorApp.DLL\\BlazorApp.DLL.csproj"
+            "D:\\BlazorApp\\BlazorApp.DLL\\BlazorApp.DLL.csproj": {
+              "projectPath": "D:\\BlazorApp\\BlazorApp.DLL\\BlazorApp.DLL.csproj"
             },
-            "D:\\Projects\\BlazorApp-UnitTest and 3tier\\BlazorApp\\BlazorApp.Model\\BlazorApp.Model.csproj": {
-              "projectPath": "D:\\Projects\\BlazorApp-UnitTest and 3tier\\BlazorApp\\BlazorApp.Model\\BlazorApp.Model.csproj"
+            "D:\\BlazorApp\\BlazorApp.Model\\BlazorApp.Model.csproj": {
+              "projectPath": "D:\\BlazorApp\\BlazorApp.Model\\BlazorApp.Model.csproj"
             },
-            "D:\\Projects\\BlazorApp-UnitTest and 3tier\\BlazorApp\\BlazorApp.UI\\BlazorApp.UI.csproj": {
-              "projectPath": "D:\\Projects\\BlazorApp-UnitTest and 3tier\\BlazorApp\\BlazorApp.UI\\BlazorApp.UI.csproj"
+            "D:\\BlazorApp\\BlazorApp.UI\\BlazorApp.UI.csproj": {
+              "projectPath": "D:\\BlazorApp\\BlazorApp.UI\\BlazorApp.UI.csproj"
             }
           }
         }

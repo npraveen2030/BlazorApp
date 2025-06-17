@@ -36,7 +36,7 @@ namespace BlazorApp.UI.Components.Pages.Associations
 
         public void HandleProjectSelect(int id)
         {
-            if (id == 21)
+            if (id == 20)
             {
                 NavManager.NavigateTo("/pricingdetails",forceLoad:true);
             }

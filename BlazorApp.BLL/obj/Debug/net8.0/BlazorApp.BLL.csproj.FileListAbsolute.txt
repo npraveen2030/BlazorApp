@@ -17,3 +17,23 @@ D:\Projects\BlazorApp-UnitTest and 3tier\BlazorApp\BlazorApp.BLL\obj\Debug\net8.
 D:\Projects\BlazorApp-UnitTest and 3tier\BlazorApp\BlazorApp.BLL\obj\Debug\net8.0\BlazorApp.BLL.pdb
 D:\Projects\BlazorApp-UnitTest and 3tier\BlazorApp\BlazorApp.BLL\obj\Debug\net8.0\BlazorApp.BLL.genruntimeconfig.cache
 D:\Projects\BlazorApp-UnitTest and 3tier\BlazorApp\BlazorApp.BLL\obj\Debug\net8.0\ref\BlazorApp.BLL.dll
+D:\BlazorApp\BlazorApp.BLL\bin\Debug\net8.0\BlazorApp.BLL.deps.json
+D:\BlazorApp\BlazorApp.BLL\bin\Debug\net8.0\BlazorApp.BLL.runtimeconfig.json
+D:\BlazorApp\BlazorApp.BLL\bin\Debug\net8.0\BlazorApp.BLL.dll
+D:\BlazorApp\BlazorApp.BLL\bin\Debug\net8.0\BlazorApp.BLL.pdb
+D:\BlazorApp\BlazorApp.BLL\bin\Debug\net8.0\BlazorApp.DLL.dll
+D:\BlazorApp\BlazorApp.BLL\bin\Debug\net8.0\BlazorApp.Model.dll
+D:\BlazorApp\BlazorApp.BLL\bin\Debug\net8.0\BlazorApp.DLL.pdb
+D:\BlazorApp\BlazorApp.BLL\bin\Debug\net8.0\BlazorApp.Model.pdb
+D:\BlazorApp\BlazorApp.BLL\obj\Debug\net8.0\BlazorApp.BLL.csproj.AssemblyReference.cache
+D:\BlazorApp\BlazorApp.BLL\obj\Debug\net8.0\BlazorApp.BLL.GeneratedMSBuildEditorConfig.editorconfig
+D:\BlazorApp\BlazorApp.BLL\obj\Debug\net8.0\BlazorApp.BLL.AssemblyInfoInputs.cache
+D:\BlazorApp\BlazorApp.BLL\obj\Debug\net8.0\BlazorApp.BLL.AssemblyInfo.cs
+D:\BlazorApp\BlazorApp.BLL\obj\Debug\net8.0\BlazorApp.BLL.csproj.CoreCompileInputs.cache
+D:\BlazorApp\BlazorApp.BLL\obj\Debug\net8.0\BlazorApp.BLL.sourcelink.json
+D:\BlazorApp\BlazorApp.BLL\obj\Debug\net8.0\BlazorAp.4B75E9D9.Up2Date
+D:\BlazorApp\BlazorApp.BLL\obj\Debug\net8.0\BlazorApp.BLL.dll
+D:\BlazorApp\BlazorApp.BLL\obj\Debug\net8.0\refint\BlazorApp.BLL.dll
+D:\BlazorApp\BlazorApp.BLL\obj\Debug\net8.0\BlazorApp.BLL.pdb
+D:\BlazorApp\BlazorApp.BLL\obj\Debug\net8.0\BlazorApp.BLL.genruntimeconfig.cache
+D:\BlazorApp\BlazorApp.BLL\obj\Debug\net8.0\ref\BlazorApp.BLL.dll

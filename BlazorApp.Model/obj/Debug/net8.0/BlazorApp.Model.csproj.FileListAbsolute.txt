@@ -12,3 +12,18 @@ D:\Projects\BlazorApp-UnitTest and 3tier\BlazorApp\BlazorApp.Model\obj\Debug\net
 D:\Projects\BlazorApp-UnitTest and 3tier\BlazorApp\BlazorApp.Model\obj\Debug\net8.0\BlazorApp.Model.pdb
 D:\Projects\BlazorApp-UnitTest and 3tier\BlazorApp\BlazorApp.Model\obj\Debug\net8.0\BlazorApp.Model.genruntimeconfig.cache
 D:\Projects\BlazorApp-UnitTest and 3tier\BlazorApp\BlazorApp.Model\obj\Debug\net8.0\ref\BlazorApp.Model.dll
+D:\BlazorApp\BlazorApp.Model\bin\Debug\net8.0\BlazorApp.Model.deps.json
+D:\BlazorApp\BlazorApp.Model\bin\Debug\net8.0\BlazorApp.Model.runtimeconfig.json
+D:\BlazorApp\BlazorApp.Model\bin\Debug\net8.0\BlazorApp.Model.dll
+D:\BlazorApp\BlazorApp.Model\bin\Debug\net8.0\BlazorApp.Model.pdb
+D:\BlazorApp\BlazorApp.Model\obj\Debug\net8.0\BlazorApp.Model.csproj.AssemblyReference.cache
+D:\BlazorApp\BlazorApp.Model\obj\Debug\net8.0\BlazorApp.Model.GeneratedMSBuildEditorConfig.editorconfig
+D:\BlazorApp\BlazorApp.Model\obj\Debug\net8.0\BlazorApp.Model.AssemblyInfoInputs.cache
+D:\BlazorApp\BlazorApp.Model\obj\Debug\net8.0\BlazorApp.Model.AssemblyInfo.cs
+D:\BlazorApp\BlazorApp.Model\obj\Debug\net8.0\BlazorApp.Model.csproj.CoreCompileInputs.cache
+D:\BlazorApp\BlazorApp.Model\obj\Debug\net8.0\BlazorApp.Model.sourcelink.json
+D:\BlazorApp\BlazorApp.Model\obj\Debug\net8.0\BlazorApp.Model.dll
+D:\BlazorApp\BlazorApp.Model\obj\Debug\net8.0\refint\BlazorApp.Model.dll
+D:\BlazorApp\BlazorApp.Model\obj\Debug\net8.0\BlazorApp.Model.pdb
+D:\BlazorApp\BlazorApp.Model\obj\Debug\net8.0\BlazorApp.Model.genruntimeconfig.cache
+D:\BlazorApp\BlazorApp.Model\obj\Debug\net8.0\ref\BlazorApp.Model.dll
