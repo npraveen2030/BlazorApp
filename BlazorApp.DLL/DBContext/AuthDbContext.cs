@@ -2,17 +2,20 @@
 using BlazorApp.Model.Entities.AuthDB.Core;
 using BlazorApp.Model.Entities.AuthDB.Pricing;
 using BlazorApp.Model.Entities.AuthDB.Personalization;
+using Microsoft.Extensions.Configuration;
 
 namespace BlazorApp.DLL.DBContext;
 
 public partial class AuthDbContext : DbContext
 {
-    public AuthDbContext()
+    private readonly IConfiguration _configuration;
+
+    public AuthDbContext(IConfiguration configuration)
     {
+        _configuration = configuration;
     }
 
-    public AuthDbContext(DbContextOptions<AuthDbContext> options)
-        : base(options)
+    public AuthDbContext()
     {
     }
 
@@ -49,8 +52,13 @@ public partial class AuthDbContext : DbContext
     public virtual DbSet<preferencesMasterTable> preferencesMasterTables { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-=> optionsBuilder.UseSqlServer("Server=LAPTOP-7FF2JANM;Database=AuthDB;Trusted_Connection=True;TrustServerCertificate=True");
-
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            var connectionString = _configuration.GetConnectionString("DefaultConnection");
+            optionsBuilder.UseSqlServer(connectionString);
+        }
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<AdminRoleAssociation>(entity =>
